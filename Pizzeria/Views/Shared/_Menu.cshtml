@@ -3,21 +3,20 @@
 
 @foreach (var dish in Model)
 {
-    <div class="well col-md-3" id="pizzaBox">
-        <div style="margin:10px">
-            @{
-                <img src=@string.Format($"/images/{dish.Category.Name.ToLower()}.png") />
-            }
+    <div class="col-md-3">
+        <div class ="well" id="pizzaBox">
+                @{
+                    <img src=@string.Format($"/images/{dish.Category.Name.ToLower()}.png") />
+                }
       
             <h3>
                 <strong>@dish.Name</strong>
-                <span class="label label-default">@dish.Price.ToString("c")</span>
             </h3>
-            <p>
-                <a class="btn btn-default" asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Details</a>
-                <a class="btn btn-default" asp-controller="Home" asp-action="AddToCart" asp-route-id=@dish.DishId asp-route-quantity="1"><span class="glyphicon glyphicon-shopping-cart"></span></a>
-            </p>
+            <p class="label label-default">@dish.Price.ToString("c")</p>
+                <p>
+                    <a class="btn btn-default" asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Details</a>
+                    <a class="btn btn-default" asp-controller="Home" asp-action="AddToCart" asp-route-id=@dish.DishId asp-route-quantity="1"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                </p>
         </div>
     </div>
-    
-}
+                }
