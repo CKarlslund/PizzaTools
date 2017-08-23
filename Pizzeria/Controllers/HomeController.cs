@@ -108,7 +108,11 @@ namespace Pizzeria.Controllers
         public IActionResult FilterCategories(int id)
         {
             var products = _context.Dishes
-                .Where(x => x.CategoryId.Equals(id)).ToList();
+                .Where(x => x.CategoryId.Equals(id))
+                .Include(b => b.Category)
+                .Include(c => c.DishIngredients)
+                .ThenInclude(e => e.Ingredient)
+                .ToList();
 
             return View("Index", products);
         }

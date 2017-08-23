@@ -8,9 +8,6 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 
-.p {
-    padding: 5px;
-}
 
 .body-content {
     padding-left: 15px;
@@ -80,6 +77,9 @@ li {
     font-size: 1em;
 }
 
+#pizzaBox div {
+    padding: 5px;
+}
 /* Banner */
 #banner {
     position: relative;

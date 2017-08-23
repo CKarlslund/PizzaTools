@@ -8,11 +8,13 @@
                 @{
                     <img src=@string.Format($"/images/{dish.Category.Name.ToLower()}.png") />
                 }
-      
-            <h3>
-                <strong>@dish.Name</strong>
-            </h3>
-            <p class="label label-default">@dish.Price.ToString("c")</p>
+            
+            <div>
+                <h3>
+                    <strong>@dish.Name</strong>
+                </h3>
+            </div>            
+            <div class="label label-default">@dish.Price.ToString("c")</div>
                 <p>
                     <a class="btn btn-default" asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Details</a>
                     <a class="btn btn-default" asp-controller="Home" asp-action="AddToCart" asp-route-id=@dish.DishId asp-route-quantity="1"><span class="glyphicon glyphicon-shopping-cart"></span></a>
