@@ -1,0 +1,31 @@
+﻿@model Pizzeria.Models.Category
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Category details</h2>
+
+<table>
+    <thead>
+    <tr>
+        <td>
+            Name
+        </td>
+        <td>
+            Description
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            @Model.Name
+        </td>
+        <td>
+            @Model.Description
+        </td>
+    </tr>
+    </tbody>
+</table>

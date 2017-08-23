@@ -1,0 +1,23 @@
+﻿
+
+@{
+    ViewBag.Title = "Administrator panel";
+    Layout = "_Layout";
+}
+
+<h2>Wooo</h2>
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <a asp-area="" asp-controller="Dish" asp-action="Index">Dishes</a>
+            </td>
+
+        </tr>
+    </tbody>
+
+</table>
+
+<a asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+<a asp-area="" asp-controller="Ingredient" asp-action="Index">Ingredients</a>
+<a asp-area="" asp-controller="ApplicationUser" asp-action="Index">Users</a>

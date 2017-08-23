@@ -1,0 +1,18 @@
+﻿@using System
+@model System.Collections.Generic.List<Pizzeria.Models.Category>
+
+@{
+    ViewBag.Title = "Categories";
+    Layout = "_Layout";
+}
+
+<h2>Categories</h2>
+
+<div>
+    @foreach (var category in Model)
+    {
+        <div>
+            <a>@category.Name</a>
+        </div>
+    }
+</div>
