@@ -49,6 +49,7 @@ namespace Pizzeria
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<DbInitializer>();
             services.AddTransient<IdentityRole>();
+            services.AddTransient<CategoryService>();
 
             //Password options
             services.Configure<IdentityOptions>(options =>
