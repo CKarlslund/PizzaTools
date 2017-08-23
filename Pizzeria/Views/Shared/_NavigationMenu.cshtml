@@ -1,0 +1,17 @@
+﻿@inject Pizzeria.Services.CategoryService CategoryService
+
+<div class="col-xs-4 col-md-2">
+    <div style="position: fixed;">
+        <h1>Navigation</h1>
+        <ul>
+            @{
+                foreach (var category in CategoryService.All().Result)
+                {
+                    <li>
+                        <a asp-controller="Home" asp-action="FilterCategories" asp-route-id=@category.CategoryId>@category.Name</a>
+                    </li>                   
+                }
+            }
+        </ul>
+    </div>
+</div>  

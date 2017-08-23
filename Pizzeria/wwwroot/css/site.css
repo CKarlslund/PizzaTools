@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    height: 100%
 }
 
 /* Wrapping element */
@@ -8,17 +9,74 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    font-family: "Roboto", sans-serif;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+/* Banner */
+#banner {
+    position: relative;
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+#banner img {
+    vertical-align: top;
+}
+
+#banner-text {
+    font-size: 8em;
+    color: white;
+    position: absolute;
+    top: 20px;
+    margin: 0 auto;
+    bottom: 0;
+    max-width: 1000px;
+    left: 40px;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: black;
+}
+
+    a:hover {
+        text-decoration: none;
+        color: black;
+    }
+
+/* Lists */
+
+ul {
+    list-style-type: none;
+    margin: auto;
+}
+
+li {
+    padding: 5px;
+}
+
+/* PizzaBox*/
+#pizzaBox {
+    margin-left: 5px;
+}
+
+#pizzaBox img {
+    width: 150px
+}
+
+/* Banner */
+#banner {
+    position: relative;
+    padding: 10px;
+}
+
+#banner img {
+    vertical-align: top;
+}
+
+#banner-text {
+    position: absolute;
+    top: 20px;
+    left: 10px;
 }
 
 /* QR code generator */

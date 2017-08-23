@@ -8,16 +8,31 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Pizzeria.Data;
 using Pizzeria.Models;
 
 namespace Pizzeria.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var dishes = await _context.Dishes
+                .Include(b => b.Category)
+                .Include(c => c.DishIngredients)
+                .ThenInclude(e => e.Ingredient)
+                .ToListAsync();
+
+            return View(dishes);
         }
 
         public IActionResult About()
@@ -88,6 +103,14 @@ namespace Pizzeria.Controllers
         private string GetSessionString(string sessionName)
         {
             return HttpContext.Session.GetString(sessionName);
+        }
+
+        public IActionResult FilterCategories(int id)
+        {
+            var products = _context.Dishes
+                .Where(x => x.CategoryId.Equals(id)).ToList();
+
+            return View("Index", products);
         }
     }
 }
