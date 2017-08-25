@@ -55,11 +55,14 @@ namespace Pizzeria.Data
                 var toolCategory = new Category() {Name = "Tools", Description = "Wow tools"};
 
                 //Dishes
-                var cappricciosa = new Dish(){Name = "Cappricciosa", Price = 70, Category = pizzaCategory };
-                var margherita = new Dish() { Name = "marguerita", Price = 80, Category = pizzaCategory};
-                var vegetariana = new Dish() { Name = "vegetariana", Price = 90, Category = pizzaCategory };
-                var venuzio = new Dish() { Name = "Venuzio", Price = 100, Category = pizzaCategory };
+                var cappricciosa = new Dish(){Name = "Cappricciosa", Price = 70, Category = pizzaCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Pizza-icon.png" };
+                var margherita = new Dish() { Name = "marguerita", Price = 80, Category = pizzaCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Pizza-icon.png" };
+                var vegetariana = new Dish() { Name = "vegetariana", Price = 90, Category = pizzaCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Pizza-icon.png" };
+                var venuzio = new Dish() { Name = "Venuzio", Price = 100, Category = pizzaCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Pizza-icon.png" };
 
+                var greekSalad = new Dish() { Name="Greek salad", Price=55, Category = saladCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Salad-icon.png" };
+                var avocadoSalad = new Dish() { Name = "Avocado salad", Price = 50, Category = saladCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Salad-icon.png" };
+                var eggSalad = new Dish() { Name = "Egg Salad", Price = 60, Category = saladCategory, ImageUrl = "http://icons.iconarchive.com/icons/aha-soft/desktop-buffet/256/Salad-icon.png" };
 
                 //DishIngredients
                 var cappricciosacheese = new DishIngredient(){Dish = cappricciosa, Ingredient = cheese};
@@ -75,6 +78,7 @@ namespace Pizzeria.Data
                 context.AddRange(cappricciosatomato, cappricciosacheese);
                 context.AddRange(pizzaCategory, pastaCategory, saladCategory, toolCategory);
                 context.AddRange(cappricciosa, margherita, vegetariana, venuzio);
+                context.AddRange(greekSalad, avocadoSalad, eggSalad);
                 context.SaveChanges();
             }
         }

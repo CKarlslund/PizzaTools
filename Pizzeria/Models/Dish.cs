@@ -18,5 +18,7 @@ namespace Pizzeria.Models
 
         [Display(Name = "Ingredients")]
         public List<DishIngredient> DishIngredients { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }
