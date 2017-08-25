@@ -42,5 +42,6 @@ namespace Pizzeria.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
     }
 }

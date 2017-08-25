@@ -50,6 +50,7 @@ namespace Pizzeria
             services.AddTransient<DbInitializer>();
             services.AddTransient<IdentityRole>();
             services.AddTransient<CategoryService>();
+            services.AddTransient<BasketService>();
 
             //Password options
             services.Configure<IdentityOptions>(options =>

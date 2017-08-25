@@ -45,10 +45,13 @@
     </div>
 </nav>
 
-<div id="wrapper">
-    @await Html.PartialAsync("_NavigationMenu")
+@if (ViewBag.HideSection == false)
+{
+    <div id="wrapper">
+        @await Html.PartialAsync("_NavigationMenu")
    
-</div>
+    </div>
+}
 
     <div id="page-content-wrapper">
         <div class="container body-content container-fluid">

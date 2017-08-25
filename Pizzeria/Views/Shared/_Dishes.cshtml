@@ -1,24 +1,68 @@
 ﻿@using System.Linq
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Routing
 @model System.Collections.Generic.IEnumerable<Pizzeria.Models.Dish>
-
+    
+    
 @foreach (var dish in Model)
+    {
+        using (Html.BeginForm("AddToCart", "Home", new {DishId = dish.DishId}))
+        {
+            <div class="col-md-3">
+                <div class ="well" id="pizzaBox">
+                    @{
+                        <img src="@dish.ImageUrl"/>
+                    }
+
+                    <div>
+                        <h3>
+                            <strong>@dish.Name</strong>
+                        </h3>
+                    </div>
+                    <div class="label label-default">
+                        @dish.Price.ToString("c")
+                    </div>
+                    <div>
+                        <button type="submit" name="add-@dish.DishId">
+                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                        </button>
+                    </div>
+                    <p>
+                        <a class="btn btn-default" asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Details</a>
+                        <a class="btn btn-default" asp-controller="Home" asp-action="AddToCart" asp-route-id=@dish.DishId asp-route-quantity="1"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                    </p>
+
+                </div>
+            </div>
+        }       
+}
+
+@*@foreach (var dish in Model)
 {
     <div class="col-md-3">
         <div class ="well" id="pizzaBox">
-                @{
-                    <img src=@string.Format($"/images/{dish.Category.Name.ToLower()}.png") />
-                }
+            @{
+                    <img src="@dish.ImageUrl"/>
+            }
             
             <div>
                 <h3>
                     <strong>@dish.Name</strong>
                 </h3>
             </div>            
-            <div class="label label-default">@dish.Price.ToString("c")</div>
-                <p>
+            <div class="label label-default">
+                @dish.Price.ToString("c")
+            </div>
+            <div>
+                <button type="submit" name="add-@dish.DishId">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                </button>
+            </div>
+            <p>
                     <a class="btn btn-default" asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Details</a>
                     <a class="btn btn-default" asp-controller="Home" asp-action="AddToCart" asp-route-id=@dish.DishId asp-route-quantity="1"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                 </p>
+
         </div>
     </div>
-                }
+                }*@

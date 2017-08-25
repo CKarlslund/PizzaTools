@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +27,8 @@ namespace Pizzeria.Controllers
                 .ThenInclude(e => e.Ingredient)
                 .ToListAsync();
 
+            ViewBag.HideSection = false;
+
             return View(dishes);
         }
 
@@ -55,8 +52,10 @@ namespace Pizzeria.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(Dish dish, int? sessionId = null)
+        public IActionResult AddToCart(int dishId)
         {
+            var dish = _context.Dishes.FirstOrDefault(x => x.DishId == dishId);
+
             Basket basket;
             if (GetSessionString("basket") == null)
             {
@@ -87,10 +86,10 @@ namespace Pizzeria.Controllers
             }
             SaveToSession(basket);
 
-            return View();
+            return View("_Dishes", _context.Dishes);
         }
 
-        private Basket GetSessionObject(string sessionString)
+        public Basket GetSessionObject(string sessionString)
         {
             return JsonConvert.DeserializeObject<Basket>(GetSessionString(sessionString));
         }
@@ -100,7 +99,7 @@ namespace Pizzeria.Controllers
             HttpContext.Session.SetString("basket", JsonConvert.SerializeObject(basket));
         }
 
-        private string GetSessionString(string sessionName)
+        public string GetSessionString(string sessionName)
         {
             return HttpContext.Session.GetString(sessionName);
         }

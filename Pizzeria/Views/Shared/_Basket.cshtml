@@ -1,2 +1,25 @@
-﻿@model object
+﻿@inject Pizzeria.Services.BasketService BasketService
+    
+    @{
+        var basket = BasketService.GetCurrentBasket(Context.Session);
 
+        var total = BasketService.GetTotal(Context.Session);
+    }
+
+<div>
+    Basket:
+    <div>
+        @{
+            foreach (var item in basket.Items)
+            {
+                <div>
+                    @item.Dish.Name
+                </div>
+                
+            }
+        }
+    </div>
+    <div>
+        Total: @total
+    </div>
+</div>
