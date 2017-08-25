@@ -2,7 +2,8 @@
     padding-top: 50px;
     padding-bottom: 20px;
     height: 100%;
-    box-sizing: border-box
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Wrapping element */
@@ -22,6 +23,7 @@
 
 #banner img {
     vertical-align: top;
+    max-width: 100%;
 }
 
 #banner-text {
