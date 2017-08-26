@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -57,36 +58,41 @@ namespace Pizzeria.Controllers
             var dish = _context.Dishes.FirstOrDefault(x => x.DishId == dishId);
 
             Basket basket;
-            if (GetSessionString("basket") == null)
+
+            if (HttpContext.Session.GetInt32("BasketId") == null)
             {
                 basket = new Basket();
-                basket.Items.Add(new BasketItem()
+                basket.Items = new List<BasketItem>
                 {
-                    Dish = dish,
-                    Quantity = 1
-                });
+                    new BasketItem()
+                    {
+                        Dish = dish,
+                        Quantity = 1
+                    }
+                };
             }
             else
             {
-                basket = GetSessionObject("basket");
+                var basketId = HttpContext.Session.GetInt32("BasketId");
+                basket = _context.Baskets.FirstOrDefault(x => x.BasketId == basketId);
 
-                if (basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
+                if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
                 {
                     var existingItem = basket.Items.Single(x => x.DishId == dish.DishId);
                     existingItem.Quantity++;
                 }
                 else
                 {
-                    basket.Items.Add(new BasketItem()
+                    basket.Items?.Add(new BasketItem()
                     {
                         Dish = dish,
                         Quantity = 1
                     });
                 }
             }
-            SaveToSession(basket);
+            SaveBasket(basket);
 
-            return View("_Dishes", _context.Dishes);
+            return View("Index", _context.Dishes);
         }
 
         public Basket GetSessionObject(string sessionString)
@@ -94,9 +100,10 @@ namespace Pizzeria.Controllers
             return JsonConvert.DeserializeObject<Basket>(GetSessionString(sessionString));
         }
 
-        private void SaveToSession(Basket basket)
+        private void SaveBasket(Basket basket)
         {
-            HttpContext.Session.SetString("basket", JsonConvert.SerializeObject(basket));
+            _context.Baskets.Add(basket);
+            _context.SaveChanges();
         }
 
         public string GetSessionString(string sessionName)

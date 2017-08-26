@@ -15,5 +15,8 @@ namespace Pizzeria.Models
         public string PostingAddress { get; set; }
         public int PostalCode { get; set; }
         public string City { get; set; }
+
+        public int BasketId { get; set; }
+        public Basket Basket { get; set; }
     }
 }

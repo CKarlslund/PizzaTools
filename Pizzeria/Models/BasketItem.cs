@@ -9,6 +9,7 @@ namespace Pizzeria.Models
     {
         public int BasketItemId { get; set; }
         public Basket Basket { get; set; }
+
         public int Quantity { get; set; }
 
         public int DishId { get; set; }

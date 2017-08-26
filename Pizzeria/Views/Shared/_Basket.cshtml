@@ -9,14 +9,15 @@
 <div>
     Basket:
     <div>
-        @{
+        @{if(basket?.Items != null) { 
             foreach (var item in basket.Items)
             {
                 <div>
                     @item.Dish.Name
                 </div>
-                
+
             }
+          }
         }
     </div>
     <div>

@@ -35,6 +35,19 @@ namespace Pizzeria.Data
                 .WithMany(ingredient => ingredient.DishIngredients)
                 .HasForeignKey(dishIngredient => dishIngredient.IngredientId);
 
+            builder.Entity<BasketItemIngredient>()
+                .HasKey(ingredient => new { ingredient.BasketItemId, ingredient.IngredientId });
+
+            builder.Entity<BasketItemIngredient>()
+                .HasOne(dishIngredient => dishIngredient.BasketItem)
+                .WithMany(dish => dish.BasketItemIngredients)
+                .HasForeignKey(dishIngredient => dishIngredient.BasketItemId);
+
+            builder.Entity<BasketItemIngredient>()
+                .HasOne(basketItemIngredient => basketItemIngredient.Ingredient)
+                .WithMany(ingredient => ingredient.BasketItemIngredients)
+                .HasForeignKey(basketItemIngredient => basketItemIngredient.IngredientId);
+
             base.OnModelCreating(builder);
         }
 
@@ -43,5 +56,7 @@ namespace Pizzeria.Data
         public DbSet<DishIngredient> DishIngredients { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<BasketItemIngredient> BasketItemIngredients { get; set; }
     }
 }

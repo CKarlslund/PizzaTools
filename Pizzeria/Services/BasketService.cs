@@ -21,36 +21,35 @@ namespace Pizzeria.Services
         
         public Basket GetCurrentBasket(ISession contextSession)
         {
-            return _context.Baskets.FirstOrDefault(x => x.BasketId == GetCurrentBasketId(contextSession));
+            var thing = _context.Baskets.FirstOrDefault(x => x.BasketId == GetCurrentBasketId(contextSession));
+            return thing;
         }
 
         private int GetCurrentBasketId(ISession contextSession)
         {
-            var basketId = contextSession.GetInt32("BasketId").Value;
+            var basketId = contextSession.GetInt32("BasketId");
 
-            if (contextSession.GetInt32("BasketId").HasValue) return basketId;
-            var basket = new Basket();
+            if (basketId.HasValue) return basketId.Value;
+            var basket = new Basket(){Items = new List<BasketItem>()};
             _context.Baskets.Add(basket);
             _context.SaveChanges();
             contextSession.SetInt32("BasketId", basket.BasketId);
             basketId = basket.BasketId;
 
-            return basketId;
+            return basketId.Value;
         }
 
         public int GetTotal(ISession contextSession)
         {
-            var currentBasket = GetCurrentBasket(contextSession).Items;
+            var currentBasket = GetCurrentBasket(contextSession);
 
             var total = 0;
 
-            if (currentBasket.Count > 0)
-            {
-                foreach (var currentBasketItem in currentBasket)
+            if (currentBasket?.Items != null)
+                foreach (var currentBasketItem in currentBasket.Items)
                 {
                     total += currentBasketItem.Quantity * currentBasketItem.Dish.Price;
                 }
-            }
 
             return total;
         }
