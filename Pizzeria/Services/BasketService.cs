@@ -34,6 +34,9 @@ namespace Pizzeria.Services
             _context.Baskets.Add(basket);
             _context.SaveChanges();
             contextSession.SetInt32("BasketId", basket.BasketId);
+
+            var thing = contextSession.GetInt32("BasketId");
+
             basketId = basket.BasketId;
 
             return basketId.Value;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pizzeria.Data;
+using Pizzeria.Extensions;
 using Pizzeria.Models;
 
 namespace Pizzeria.Controllers
@@ -53,32 +54,36 @@ namespace Pizzeria.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(int dishId)
+        public IActionResult AddToBasket(int dishId)
         {
             var dish = _context.Dishes.FirstOrDefault(x => x.DishId == dishId);
 
             Basket basket;
 
-            if (HttpContext.Session.GetInt32("BasketId") == null)
+            var basketId = HttpContext.Session.GetInt32("BasketId").Value;
+
+            if (basketId == null)
             {
-                basket = new Basket();
-                basket.Items = new List<BasketItem>
+                basket = new Basket
                 {
-                    new BasketItem()
+                    Items = new List<BasketItem>
                     {
-                        Dish = dish,
-                        Quantity = 1
+                        new BasketItem()
+                        {
+                            Dish = dish,
+                            Quantity = 1
+                        }
                     }
                 };
             }
             else
             {
-                var basketId = HttpContext.Session.GetInt32("BasketId");
-                basket = _context.Baskets.FirstOrDefault(x => x.BasketId == basketId);
-
+                basket = _context.Baskets.SingleOrDefault(x => x.BasketId == basketId)
+                         ?? new Basket();
+                         
                 if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
                 {
-                    var existingItem = basket.Items.Single(x => x.DishId == dish.DishId);
+                    var existingItem = basket.Items.FirstOrDefault(x => x.DishId == dish.DishId);
                     existingItem.Quantity++;
                 }
                 else
@@ -91,6 +96,9 @@ namespace Pizzeria.Controllers
                 }
             }
             SaveBasket(basket);
+            HttpContext.Session.SetInt32("BasketId", basket.BasketId);
+
+            var what = HttpContext.Session.GetInt32("BasketId");
 
             return View("Index", _context.Dishes);
         }
@@ -102,7 +110,10 @@ namespace Pizzeria.Controllers
 
         private void SaveBasket(Basket basket)
         {
-            _context.Baskets.Add(basket);
+            _context.AddOrUpdate(basket);
+
+            var basketR = _context.Baskets.ToList();
+            //var oldBasket = _context.Baskets.FirstOrDefault(x => x.BasketId == basket.BasketId);
             _context.SaveChanges();
         }
 
