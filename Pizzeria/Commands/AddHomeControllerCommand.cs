@@ -10,7 +10,7 @@ using Pizzeria.Models;
 
 namespace Pizzeria.Commands
 {
-    public class addHomeControllerCommand : BaseHomeControllerCommand
+    public class AddHomeControllerCommand : BaseHomeControllerCommand
     {
         public async override Task<IActionResult> Execute(object id)
         {
@@ -37,7 +37,7 @@ namespace Pizzeria.Commands
             }
             else
             {
-                basket = Context.Baskets.Include(y => y.Items).ThenInclude(z => z.BasketItemIngredients).SingleOrDefault(x => x.BasketId == basketId)
+                basket = Context.Baskets.Include(y => y.Items).ThenInclude(h => h.Dish).SingleOrDefault(x => x.BasketId == basketId)
                          ?? new Basket();
 
                 if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))

@@ -3,6 +3,7 @@ using Pizzeria.Data;
 using Pizzeria.Models;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pizzeria.Services
 {
@@ -17,8 +18,8 @@ namespace Pizzeria.Services
         
         public Basket GetCurrentBasket(ISession contextSession)
         {
-            var thing = _context.Baskets.FirstOrDefault(x => x.BasketId == GetCurrentBasketId(contextSession));
-            return thing;
+            var temp = _context.Baskets.Include(y => y.Items).FirstOrDefault(x => x.BasketId == GetCurrentBasketId(contextSession));
+            return temp;
         }
 
         private int GetCurrentBasketId(ISession contextSession)
