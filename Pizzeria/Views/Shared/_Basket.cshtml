@@ -7,20 +7,54 @@
     }
 
 <div>
-    Basket:
-    <div>
-        @{if(basket?.Items != null) { 
-            foreach (var item in basket.Items)
-            {
-                <div>
-                    @item.Dish.Name
-                </div>
-
-            }
+    <table>
+        <thead>
+        <tr>
+            <th>
+                Item
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @{if (basket?.Items != null)
+          {
+              foreach (var item in basket.Items)
+              {
+                  <tr>
+                      <td>
+                          @item.Dish.Name
+                      </td>
+                      <td>
+                          @item.Quantity
+                      </td>
+                      <td>       
+                          <button class="btn btn-default customize" type="submit" name="Customize-@item.DishId">
+                              <span class="glyphicon glyphicon-edit"></span>
+                          </button>
+                      </td>
+                  </tr>
+              }
           }
         }
-    </div>
-    <div>
-        Total: @total
-    </div>
+        <tr>
+            <td>
+                <b>Total:</b>
+            </td>
+            <td>
+                @total
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <button class="btn btn-info checkout" type="submit" name="Checkout-@basket">
+        CHECKOUT
+    </button>
 </div>
