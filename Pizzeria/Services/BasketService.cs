@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Pizzeria.Data;
 using Pizzeria.Models;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
 using System.Linq;
 
 namespace Pizzeria.Services
@@ -35,7 +31,7 @@ namespace Pizzeria.Services
             _context.SaveChanges();
             contextSession.SetInt32("BasketId", basket.BasketId);
 
-            var thing = contextSession.GetInt32("BasketId");
+            var temp = contextSession.GetInt32("BasketId");
 
             basketId = basket.BasketId;
 

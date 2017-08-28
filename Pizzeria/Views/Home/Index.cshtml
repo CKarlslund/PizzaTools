@@ -14,17 +14,19 @@
             </div>
         </div>
     </div>
+    <form asp-controller="Home" asp-action="ExecuteCommands" method="post">
+        <div class="col-md-8">
+            <h2>Menu</h2>
+            @{
+                Html.RenderPartial("_Dishes", Model);
+            }
+        </div>
+        <div class="col-md-4">
+            <h2>Basket</h2>
+            @{
+                Html.RenderPartial("_Basket");
+            }
+        </div>
+    </form>
 
-    <div class="col-md-8">
-        <h2>Menu</h2>
-        @{
-            Html.RenderPartial("_Dishes", Model);
-        }
-    </div>
-    <div class="col-md-4">
-        <h2>Basket</h2>
-        @{
-            Html.RenderPartial("_Basket");
-        }
-    </div>
 </div>
