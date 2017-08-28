@@ -1,4 +1,5 @@
-﻿@inject Pizzeria.Services.BasketService BasketService
+﻿@using System.Security.Cryptography.X509Certificates
+@inject Pizzeria.Services.BasketService BasketService
     
     @{
         var basket = BasketService.GetCurrentBasket(Context.Session);
@@ -30,11 +31,11 @@
                           @item.Dish.Name
                       </td>
                       <td>
-                          @item.Quantity
-                      </td>
+                          <span><input asp-for="@item.Quantity" class="form-control" type="text" style="float:left;"/></span> 
+                        </td>
                       <td>       
                           <button class="btn btn-default customize" type="submit" name="Customize-@item.DishId">
-                              <span class="glyphicon glyphicon-edit"></span>
+                              <span class="glyphicon glyphicon-edit" onclick="location.reload()"></span>
                           </button>
                       </td>
                   </tr>
@@ -43,10 +44,10 @@
         }
         <tr>
             <td>
-                <b>Total:</b>
+                <b>SubTotal:</b>
             </td>
             <td>
-                @total
+                @total <button  type="submit" name="UpdateQuantity-@basket.BasketId"><span class="glyphicon glyphicon-refresh"></span></button>
             </td>
         </tr>
         </tbody>
