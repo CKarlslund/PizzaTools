@@ -60,7 +60,7 @@ namespace Pizzeria.Controllers
 
             Basket basket;
 
-            var basketId = HttpContext.Session.GetInt32("BasketId").Value;
+            var basketId = HttpContext.Session.GetInt32("BasketId");
 
             if (basketId == null)
             {
@@ -78,7 +78,7 @@ namespace Pizzeria.Controllers
             }
             else
             {
-                basket = _context.Baskets.SingleOrDefault(x => x.BasketId == basketId)
+                basket = _context.Baskets.Include(y => y.Items).SingleOrDefault(x => x.BasketId == basketId)
                          ?? new Basket();
                          
                 if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
@@ -113,7 +113,6 @@ namespace Pizzeria.Controllers
             _context.AddOrUpdate(basket);
 
             var basketR = _context.Baskets.ToList();
-            //var oldBasket = _context.Baskets.FirstOrDefault(x => x.BasketId == basket.BasketId);
             _context.SaveChanges();
         }
 
