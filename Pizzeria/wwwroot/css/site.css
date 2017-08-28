@@ -254,3 +254,8 @@ td.text-center {
 td.text-right {
     text-align: right;
 }
+
+.form-control {
+    width: 30%;
+    padding: 3px;
+}
