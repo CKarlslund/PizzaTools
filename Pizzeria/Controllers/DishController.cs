@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -76,7 +77,7 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
+            var dish = await _context.Dishes.Include(x => x.DishIngredients).ThenInclude(y => y.Ingredient).SingleOrDefaultAsync(m => m.DishId == id);
             if (dish == null)
             {
                 return NotFound();
@@ -89,7 +90,7 @@ namespace Pizzeria.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish)
+        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish, IFormCollection formCollection)
         {
             if (id != dish.DishId)
             {
@@ -100,7 +101,22 @@ namespace Pizzeria.Controllers
             {
                 try
                 {
+                    var dishIngredients = _context.DishIngredients.Where(x => x.DishId == dish.DishId);
+                    _context.DishIngredients.RemoveRange(dishIngredients);
                     _context.Update(dish);
+                    await _context.SaveChangesAsync();
+
+                    var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
+
+                    foreach (var ingredientKey in ingredientKeys)
+                    {
+                        var splitKey = ingredientKey.Split("-");
+
+                        var ingredientId = Convert.ToInt32(splitKey[1]);
+
+                        dish.DishIngredients.Add(new DishIngredient(){IngredientId = ingredientId, Enabled = true, DishId = dish.DishId});
+                    }
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
