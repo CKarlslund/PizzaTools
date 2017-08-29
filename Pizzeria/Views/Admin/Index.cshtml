@@ -5,19 +5,30 @@
     Layout = "_Layout";
 }
 
-<h2>Wooo</h2>
+<h2>Administration panel</h2>
 <table>
     <tbody>
         <tr>
             <td>
                 <a asp-area="" asp-controller="Dish" asp-action="Index">Dishes</a>
             </td>
-
         </tr>
+    <tr>
+        <td>
+            <a asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+        </td>
+        </tr>
+        <tr>
+                <td>
+                    <a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a>
+                </td>
+            </tr>
+        <tr>
+            <td>
+                <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+            </td>
+        <tr/>
     </tbody>
 
 </table>
 
-<a asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
-<a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a>
-<a asp-area="" asp-controller="ApplicationUser" asp-action="Index">Users</a>
