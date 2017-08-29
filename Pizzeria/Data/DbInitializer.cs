@@ -76,7 +76,7 @@ namespace Pizzeria.Data
                     cappricciosatomato
                 };
 
-                context.AddRange(cheese, tomato);
+                context.AddRange(cheese, tomato, mushroom, gorgonzola);
                 context.AddRange(cappricciosatomato, cappricciosacheese);
                 context.AddRange(pizzaCategory, pastaCategory, saladCategory, toolCategory);
                 context.AddRange(capricciosa, margherita, vegetariana, vesuvio);
