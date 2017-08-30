@@ -22,7 +22,7 @@
 <div id="sidebar-wrapper">
     <ul class="sidebar-nav">
             @{
-                foreach (var category in CategoryService.All().Result)
+                foreach (var category in CategoryService.All())
                 {
                     <li>
                         <a asp-controller="Home" asp-action="FilterCategories" asp-route-id=@category.CategoryId>@category.Name</a>

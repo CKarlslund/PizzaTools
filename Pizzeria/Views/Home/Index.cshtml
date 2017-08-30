@@ -58,9 +58,9 @@
                 $.ajax({
                     type: "GET",
                     url: TeamDetailPostBackURL,
-                    contentType: "application/json; charset=utf-8",
+                    contentType: "application/text",
                     data: { "Id": id },
-                    datatype: "json",
+                    dataType: "text",
                     success: function (data) {
                         debugger;
                         $('#myModalContent').html(data);

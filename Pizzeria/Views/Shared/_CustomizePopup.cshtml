@@ -7,41 +7,44 @@
     var ingredients = IngredientService.All();
 }    
 
-<div>
-
-    @*<div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title" id="myModalLabel">Customize Dish</h4>
-    </div>
-
-
-    <hr />
-    <dl class="dl-horizontal">
-        @{
-            foreach (var basketItemIngredient in Model.BasketItemIngredients)
-            {
-                <dt>
-                    @Html.DisplayNameFor(model => basketItemIngredient.Ingredient.Name)
-                </dt>
-
-                <dd>
-                    @basketItemIngredient.Ingredient.Name
-                </dd>
-            }
-        }
-    </dl>*@
-    
+<div>   
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Customize @Model.Dish.Name</h4>
         </div>
         <div class="modal-body">
-            <p>Some text in the modal.</p>
+            
+            <input type="hidden" name="basketItemId" value="@Model.BasketItemId"/>
+            <div class="form-group">
+            
+                <label class="control-label">@Model.Dish.Name</label>
+            
+                Id : @Model.BasketItemIngredients[2].IngredientId
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
     </div>
+    
 
-</div>
+  
+    @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+        
+        
+
+            @*@{
+                for (var i = 0; i < ingredients.Count; i++)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" @(Model.BasketItemIngredients[i].Enabled ? "checked" : "")
+                                   name="ingredient-@Model.BasketItemIngredients[i].IngredientId"/> @Model.BasketItemIngredients[i].Ingredient.Name
+                        </label>
+                    </div>
+                }
+            }
+            @*<span asp-validation-for="@Model." class="text-danger"></span>*@
+        </div> 
+        </div>
