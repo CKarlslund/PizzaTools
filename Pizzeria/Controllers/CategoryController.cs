@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Extensions.Internal;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
@@ -17,6 +19,7 @@ namespace Pizzeria.Controllers
             _context = context;
         }
 
+        // GET: Category
         public async Task<IActionResult> Index()
         {
             return View(await _context.Categories.ToListAsync());
@@ -32,7 +35,6 @@ namespace Pizzeria.Controllers
 
             var category = await _context.Categories
                 .SingleOrDefaultAsync(m => m.CategoryId == id);
-
             if (category == null)
             {
                 return NotFound();
@@ -52,7 +54,7 @@ namespace Pizzeria.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,Name,Price")] Category category)
+        public async Task<IActionResult> Create([Bind("CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
             {
