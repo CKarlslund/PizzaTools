@@ -12,9 +12,13 @@ namespace Pizzeria.Commands
 {
     public class AddHomeControllerCommand : BaseHomeControllerCommand
     {
-        public async override Task<IActionResult> Execute(object id)
+        public override async Task<IActionResult> Execute(object id)
         {
-            var dish = Context.Dishes.FirstOrDefault(x => x.DishId == (int)id);
+            var cartItemId = Convert.ToInt32(id);
+            var dish = Context.Dishes
+                .Include(y => y.DishIngredients)
+                .ThenInclude(z => z.Ingredient)
+                .FirstOrDefault(x => x.DishId == cartItemId);
 
             Basket basket;
             var session = Controller.HttpContext.Session;
@@ -30,14 +34,27 @@ namespace Pizzeria.Commands
                         new BasketItem()
                         {
                             Dish = dish,
-                            Quantity = 1
+                            Quantity = 1,
                         }
                     }
                 };
+
+                //Add basketItemIngredients
+                List<BasketItemIngredient> basketItemIngredients =
+                    dish.DishIngredients
+                        .Select(x => new BasketItemIngredient() {Ingredient = x.Ingredient, Enabled = x.Enabled})
+                        .ToList();
+
+                basket.Items.First().BasketItemIngredients = basketItemIngredients;
             }
             else
             {
-                basket = Context.Baskets.Include(y => y.Items).ThenInclude(h => h.Dish).SingleOrDefault(x => x.BasketId == basketId)
+                basket = Context.Baskets.Include(y => y.Items)
+                    .ThenInclude(g => g.BasketItemIngredients)
+                    .ThenInclude(p => p.Ingredient)
+                    .Include(l => l.Items)
+                    .ThenInclude(h => h.Dish)
+                    .SingleOrDefault(x => x.BasketId == basketId)
                          ?? new Basket();
 
                 if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
@@ -47,11 +64,24 @@ namespace Pizzeria.Commands
                 }
                 else
                 {
+                    List<BasketItemIngredient> basketItemIngredients = new List<BasketItemIngredient>();
+
+                    foreach (var dishIngredient in dish.DishIngredients)
+                    {
+                        var newIngredient = new BasketItemIngredient()
+                        {
+                            Ingredient = dishIngredient.Ingredient,
+                            Enabled = dishIngredient.Enabled
+                        };
+                        basketItemIngredients.Add(newIngredient);
+                    }
+
                     basket.Items?.Add(new BasketItem()
                     {
                         Dish = dish,
-                        Quantity = 1
-                    });
+                        Quantity = 1,
+                        BasketItemIngredients = basketItemIngredients                        
+                    });                    
                 }
             }
             SaveBasket(basket);

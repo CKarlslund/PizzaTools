@@ -8,9 +8,11 @@ namespace Pizzeria.Commands
 {
     public class CustomizeHomeControllerCommand : BaseHomeControllerCommand 
     {
-        public override Task<IActionResult> Execute(object id)
+        public override async Task<IActionResult> Execute(object id)
         {
-            throw new NotImplementedException();
+            var basketItemId = Convert.ToInt32(id);
+
+            return Controller.RedirectToAction("Customize", "Home", new {BasketItemId = basketItemId });
         }
     }
 }

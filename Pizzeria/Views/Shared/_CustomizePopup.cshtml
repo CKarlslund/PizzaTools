@@ -1,0 +1,47 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Pizzeria.Models.BasketItem
+@inject Pizzeria.Services.IngredientService IngredientService    
+
+@{
+    var ingredients = IngredientService.All();
+}    
+
+<div>
+
+    @*<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myModalLabel">Customize Dish</h4>
+    </div>
+
+
+    <hr />
+    <dl class="dl-horizontal">
+        @{
+            foreach (var basketItemIngredient in Model.BasketItemIngredients)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => basketItemIngredient.Ingredient.Name)
+                </dt>
+
+                <dd>
+                    @basketItemIngredient.Ingredient.Name
+                </dd>
+            }
+        }
+    </dl>*@
+    
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Customize @Model.Dish.Name</h4>
+        </div>
+        <div class="modal-body">
+            <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+</div>

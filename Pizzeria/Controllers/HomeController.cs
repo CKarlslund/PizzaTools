@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -55,69 +56,11 @@ namespace Pizzeria.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        //[HttpPost]
-        //public IActionResult AddToBasket(int dishId)
-        //{
-        //    var dish = _context.Dishes.FirstOrDefault(x => x.DishId == dishId);
-
-        //    Basket basket;
-
-        //    var basketId = HttpContext.Session.GetInt32("BasketId");
-
-        //    if (basketId == null)
-        //    {
-        //        basket = new Basket
-        //        {
-        //            Items = new List<BasketItem>
-        //            {
-        //                new BasketItem()
-        //                {
-        //                    Dish = dish,
-        //                    Quantity = 1
-        //                }
-        //            }
-        //        };
-        //    }
-        //    else
-        //    {
-        //        basket = _context.Baskets.Include(y => y.Items).SingleOrDefault(x => x.BasketId == basketId)
-        //                 ?? new Basket();
-                         
-        //        if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
-        //        {
-        //            var existingItem = basket.Items.FirstOrDefault(x => x.DishId == dish.DishId);
-        //            existingItem.Quantity++;
-        //        }
-        //        else
-        //        {
-        //            basket.Items?.Add(new BasketItem()
-        //            {
-        //                Dish = dish,
-        //                Quantity = 1
-        //            });
-        //        }
-        //    }
-        //    SaveBasket(basket);
-        //    HttpContext.Session.SetInt32("BasketId", basket.BasketId);
-
-        //    var what = HttpContext.Session.GetInt32("BasketId");
-
-        //    return View("Index", _context.Dishes);
-        //}
-
         public Basket GetSessionObject(string sessionString)
         {
             return JsonConvert.DeserializeObject<Basket>(GetSessionString(sessionString));
         }
-
-        //private void SaveBasket(Basket basket)
-        //{
-        //    _context.AddOrUpdate(basket);
-
-        //    var basketR = _context.Baskets.ToList();
-        //    _context.SaveChanges();
-        //}
-
+        
         public string GetSessionString(string sessionName)
         {
             return HttpContext.Session.GetString(sessionName);
@@ -140,9 +83,15 @@ namespace Pizzeria.Controllers
             var result = formCollection.Keys.Select(x => new {tokens = x.Split("-")})
                 .FirstOrDefault(y => y.tokens.Count() == 2);
 
-            var action = result.tokens[0];
+            var key = formCollection.Keys.SingleOrDefault(x => x.Contains("-"));
 
-            var basketId = int.Parse(result.tokens[1]);
+            var splitKey = key.Split("-");
+
+            var action = splitKey[0];
+
+            string id = splitKey[1];
+
+            var basketId = Convert.ToInt32(id);
 
             var commandName = $"Pizzeria.Commands.{action}HomeControllerCommand";
 
@@ -156,6 +105,25 @@ namespace Pizzeria.Controllers
             var actionResult = await cmd.Execute(basketId);
 
             return actionResult;
+        }
+
+        public IActionResult CustomizePopup(int id)
+        {
+            var temp = _context.BasketItems
+                .Include(x => x.BasketItemIngredients)
+                .ThenInclude(y => y.Ingredient)
+                .Include(z => z.Dish)
+                .ToList();
+
+            var basketItem = _context.BasketItems.Include(y => y.BasketItemIngredients).FirstOrDefault(x => x.BasketItemId == id);
+
+            return PartialView("_CustomizePopup", basketItem);
+        }
+
+        [HttpPost]
+        public IActionResult CustomizePopup(IFormCollection formCollection)
+        {
+            return View();
         }
     }
 }
