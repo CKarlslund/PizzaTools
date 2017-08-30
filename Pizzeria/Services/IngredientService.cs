@@ -33,7 +33,7 @@ namespace Pizzeria.Services
 
         public List<Ingredient> All()
         {
-            var temp = _context.Ingredients.ToList();
+            var temp = _context.Ingredients.OrderBy(x => x.Name).ToList();
 
             return _context.Ingredients.ToList();
         }

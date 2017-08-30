@@ -1,4 +1,6 @@
 ﻿@using System.Collections.Generic
+@using System.Linq
+@using System.Runtime.InteropServices.ComTypes
 @using Microsoft.AspNetCore.Mvc.Rendering
 @model Pizzeria.Models.BasketItem
 @inject Pizzeria.Services.IngredientService IngredientService    
@@ -20,12 +22,30 @@
             
                 <label class="control-label">@Model.Dish.Name</label>
             
-                Id : @Model.BasketItemIngredients[2].IngredientId
+                Id : @Model.BasketItemIngredients[0].IngredientId
+                
+                CHECKBOX1
+                @{
+                    foreach (var ingredient in ingredients)
+                    {
+                        var existsInModel = Model.BasketItemIngredients.Find(x => x.IngredientId == ingredient.IngredientId) != null;
 
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" @(existsInModel ? "checked" : "")
+                                       name="ingredient-@ingredient.IngredientId"
+                                       asp-for="BasketItemIngredients"/> @ingredient.Name                                
+                            </label>
+                        </div>
+                    }                    
+                }
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
     </div>
     
 
@@ -34,17 +54,7 @@
         
         
 
-            @*@{
-                for (var i = 0; i < ingredients.Count; i++)
-                {
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" @(Model.BasketItemIngredients[i].Enabled ? "checked" : "")
-                                   name="ingredient-@Model.BasketItemIngredients[i].IngredientId"/> @Model.BasketItemIngredients[i].Ingredient.Name
-                        </label>
-                    </div>
-                }
-            }
+            @*
             @*<span asp-validation-for="@Model." class="text-danger"></span>*@
         </div> 
         </div>
