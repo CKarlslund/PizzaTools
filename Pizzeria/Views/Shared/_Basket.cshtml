@@ -34,10 +34,9 @@
                           <span><input asp-for="@item.Quantity" class="form-control" type="text" style="float:left;"/></span> 
                         </td>
                       <td>       
-                          <button class="btn btn-default customize" type="submit" name="Customize-@item.BasketItemId">
-                              <span class="glyphicon glyphicon-edit" onclick="location.reload()"></span>
-                          </button>
-                          <div><a href="javascript:void(0);" class="anchorDetail" data-id="@item.BasketItemId">Details</a></div>
+                          <div>
+                                <a href="javascript:void(0);" class="anchorDetail" data-id="@item.BasketItemId"><span class="glyphicon glyphicon-edit"></span></a>
+                          </div>
                       </td>
                   </tr>
               }
