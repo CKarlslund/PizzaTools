@@ -59,5 +59,6 @@ namespace Pizzeria.Data
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<BasketItemIngredient> BasketItemIngredients { get; set; }
         public DbSet<Pizzeria.Models.ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Order> Order { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace Pizzeria.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ApplicationUser.Include(a => a.Basket);
+            var applicationDbContext = _context.ApplicationUser.Include(a => a.Orders);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace Pizzeria.Controllers
             }
 
             var applicationUser = await _context.ApplicationUser
-                .Include(a => a.Basket)
+                .Include(a => a.Orders)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
             {
@@ -65,7 +65,7 @@ namespace Pizzeria.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", applicationUser.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", applicationUser.Orders);
             return View(applicationUser);
         }
 
@@ -82,7 +82,7 @@ namespace Pizzeria.Controllers
             {
                 return NotFound();
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", applicationUser.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", applicationUser.Orders);
             return View(applicationUser);
         }
 
@@ -118,7 +118,7 @@ namespace Pizzeria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", applicationUser.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", applicationUser.Orders);
             return View(applicationUser);
         }
 
@@ -131,7 +131,7 @@ namespace Pizzeria.Controllers
             }
 
             var applicationUser = await _context.ApplicationUser
-                .Include(a => a.Basket)
+                .Include(a => a.Orders)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
             {

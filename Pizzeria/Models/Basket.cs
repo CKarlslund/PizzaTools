@@ -9,9 +9,9 @@ namespace Pizzeria.Models
     {
         public int BasketId { get; set; }
 
-        public int ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-
         public List<BasketItem> Items { get; set; }
+
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
     }
 }

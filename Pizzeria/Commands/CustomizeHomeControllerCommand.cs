@@ -33,20 +33,14 @@ namespace Pizzeria.Commands
 
             var ingredientIds = homeController._ingredientService.All().Select(x => x.IngredientId);
 
-            var basketItemIngredients = new List<BasketItemIngredient>();
-
-            foreach (var ingredientId in ingredientIds)
-            {
-                if (formCollection.Keys.Any(k => k == $"ingredient_{ingredientId}"))
+            var basketItemIngredients = (from ingredientId in ingredientIds
+                where formCollection.Keys.Any(k => k == $"ingredient_{ingredientId}")
+                select new BasketItemIngredient()
                 {
-                    var basketItemIngredient = new BasketItemIngredient()
-                    {
-                        Ingredient = context.Ingredients.FirstOrDefault(x => x.IngredientId == ingredientId),
-                        Enabled = true
-                    };
-                    basketItemIngredients.Add(basketItemIngredient);
-                }
-            }
+                    Ingredient = context.Ingredients.FirstOrDefault(x => x.IngredientId == ingredientId),
+                    Enabled = true
+                }).ToList();
+
             context.BasketItems.FirstOrDefault(x => x.BasketItemId == basketItemId).BasketItemIngredients = basketItemIngredients;
             context.SaveChanges();
 
