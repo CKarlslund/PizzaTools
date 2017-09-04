@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-Pizzeria-A107BBBB-43EF-4E4E-AF45-CC414C117D1D</UserSecretsId>
+    <Configurations>Debug;Release;LocalIIS</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LocalIIS|AnyCPU'">
+    <DefineConstants>TRACE;LOCALIIS;NETCOREAPP2_0</DefineConstants>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <OutputPath>bin\LocalIIS\netcoreapp2.0\</OutputPath>
   </PropertyGroup>
 
 

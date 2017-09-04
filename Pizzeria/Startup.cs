@@ -43,8 +43,6 @@ namespace Pizzeria
                 //options.Cookie.HttpOnly = true;
             });
 
-
-
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<DbInitializer>();
@@ -61,6 +59,12 @@ namespace Pizzeria
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
+            });
+
+            //IIS options
+            services.Configure<IISOptions>(options =>
+            {
+                
             });
 
             services.AddMvc();
