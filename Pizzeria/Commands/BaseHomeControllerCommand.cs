@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pizzeria.Controllers;
 using Pizzeria.Data;
@@ -10,6 +11,6 @@ namespace Pizzeria.Commands
         public ApplicationDbContext Context { get; set; }
         public HomeController Controller { get; set; }
 
-        public abstract Task<IActionResult> Execute(object id);
+        public abstract Task<IActionResult> Execute(object id, IFormCollection formCollection);
     }
 }

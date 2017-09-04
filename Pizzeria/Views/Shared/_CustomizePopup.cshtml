@@ -16,15 +16,13 @@
             <h4 class="modal-title">Customize @Model.Dish.Name</h4>
         </div>
         <div class="modal-body">
-            
-            <input type="hidden" name="basketItemId" value="@Model.BasketItemId"/>
+            <form method="post" asp-controller="Home"asp-action="ExecuteCommands">
+
+            <input type="hidden" name="basketItemId" value="@Model.BasketItemId" asp-for="BasketItemId"/>
             <div class="form-group">
-            
+
                 <label class="control-label">@Model.Dish.Name</label>
-            
-                Id : @Model.BasketItemIngredients[0].IngredientId
-                
-                CHECKBOX1
+
                 @{
                     foreach (var ingredient in ingredients)
                     {
@@ -33,20 +31,24 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" @(existsInModel ? "checked" : "")
-                                       name="ingredient-@ingredient.IngredientId"
-                                       asp-for="BasketItemIngredients"/> @ingredient.Name                                
+                                       name="ingredient_@ingredient.IngredientId"
+                                       asp-for="BasketItemIngredients"/> @ingredient.Name
                             </label>
                         </div>
-                    }                    
+                    }
                 }
             </div>
             <div class="modal-footer">
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
+                @*<div class="form-group">
+                    <button class="btn btn-default" type="submit" name="CustomizeIngredient-@Model.BasketItemId">
+                        Save
+                    </button>
+                </div>*@
+                <button type="submit" class="btn btn-default customize" name="Customize-@Model.BasketItemId">Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-    </div>
+            </form>
+        </div>
     
 
   

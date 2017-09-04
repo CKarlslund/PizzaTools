@@ -12,16 +12,19 @@ using Pizzeria.Commands;
 using Pizzeria.Data;
 using Pizzeria.Extensions;
 using Pizzeria.Models;
+using Pizzeria.Services;
 
 namespace Pizzeria.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        public readonly IngredientService _ingredientService;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, IngredientService ingredientService)
         {
             _context = context;
+            _ingredientService = ingredientService;
         }
 
         public async Task<IActionResult> Index()
@@ -102,7 +105,7 @@ namespace Pizzeria.Controllers
 
             cmd.Controller = this;
 
-            var actionResult = await cmd.Execute(basketId);
+            var actionResult = await cmd.Execute(basketId, formCollection);
 
             return actionResult;
         }
@@ -120,10 +123,10 @@ namespace Pizzeria.Controllers
             return PartialView("_CustomizePopup", basketItem);
         }
 
-        [HttpPost]
-        public IActionResult CustomizePopup(IFormCollection formCollection)
+      [HttpPost]
+        public IActionResult CustomizeIngredients(int basketId, IFormCollection formCollection)
         {
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }

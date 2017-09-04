@@ -12,7 +12,7 @@ namespace Pizzeria.Commands
 {
     public class AddHomeControllerCommand : BaseHomeControllerCommand
     {
-        public override async Task<IActionResult> Execute(object id)
+        public override async Task<IActionResult> Execute(object id, IFormCollection formCollection)
         {
             var cartItemId = Convert.ToInt32(id);
             var dish = Context.Dishes
