@@ -36,11 +36,13 @@ namespace Pizzeria
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddDistributedMemoryCache();
+
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
                 options.IdleTimeout = TimeSpan.FromSeconds(650);
-                //options.Cookie.HttpOnly = true;
+                options.Cookie.HttpOnly = true;
             });
 
             // Add application services.
