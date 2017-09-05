@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +35,16 @@ namespace Pizzeria.Commands
             order.Basket = basket;
             order.User = new ApplicationUser();
 
-            
+            if (this.Controller.User.Identity.IsAuthenticated)
+            {
+                var userId = this.Controller.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            return Controller.RedirectToAction("Checkout", "Home");
+                var user = context.Users.FirstOrDefault(x => x.Id == userId);
+
+                return Controller.RedirectToAction("Payment", "Orders", new {Basket = basket, User = user});
+            }
+
+            return Controller.RedirectToAction("LoginOrAnonymous", "Orders", new { Basket = basket});
         }
     }
 }

@@ -48,6 +48,12 @@ namespace Pizzeria.Data
                 .WithMany(ingredient => ingredient.BasketItemIngredients)
                 .HasForeignKey(basketItemIngredient => basketItemIngredient.IngredientId);
 
+            builder.Entity<Basket>()
+                .HasOne(x => x.Order);
+
+            builder.Entity<Order>()
+                .HasOne(x => x.Basket);
+
             base.OnModelCreating(builder);
         }
 

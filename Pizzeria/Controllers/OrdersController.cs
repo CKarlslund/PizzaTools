@@ -65,7 +65,7 @@ namespace Pizzeria.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.Basket.BasketId);
             return View(order);
         }
 
@@ -82,7 +82,7 @@ namespace Pizzeria.Controllers
             {
                 return NotFound();
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.Basket.BasketId);
             return View(order);
         }
 
@@ -118,7 +118,7 @@ namespace Pizzeria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.Basket.BasketId);
             return View(order);
         }
 
@@ -155,6 +155,24 @@ namespace Pizzeria.Controllers
         private bool OrderExists(int id)
         {
             return _context.Order.Any(e => e.OrderId == id);
+        }
+
+        public IActionResult Payment(Basket basket, ApplicationUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult LoginOrAnonymous(Basket basket)
+        {
+            var user = new ApplicationUser();
+            var order = new Order()
+            {
+                Basket = basket
+            };
+
+            user.Orders.Add(order);
+
+            return View(user);
         }
     }
 }

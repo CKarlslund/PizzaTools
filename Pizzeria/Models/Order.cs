@@ -14,7 +14,6 @@ namespace Pizzeria.Models
         public int ApplicationUserId { get; set; }
         public ApplicationUser User { get; set; }
 
-        public int BasketId { get; set; }
         public Basket Basket { get; set; }
     }
 }
