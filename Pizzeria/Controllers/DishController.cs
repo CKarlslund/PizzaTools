@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
@@ -14,10 +15,12 @@ namespace Pizzeria.Controllers
     public class DishController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<DishController> _logger;
 
-        public DishController(ApplicationDbContext context)
+        public DishController(ApplicationDbContext context, ILogger<DishController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Dishes
@@ -31,6 +34,8 @@ namespace Pizzeria.Controllers
         {
             if (id == null)
             {
+                _logger.LogError("No dish ID");
+
                 return NotFound();
             }
 

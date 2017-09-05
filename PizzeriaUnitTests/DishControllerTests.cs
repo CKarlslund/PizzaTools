@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using InMemTests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Pizzeria.Controllers;
 using Pizzeria.Data;
@@ -33,7 +34,11 @@ namespace PizzeriaUnitTests
 
             var mockDbContext = new Mock<ApplicationDbContext>();
             mockDbContext.Setup(repo => repo.Dishes).Returns(fakeDishes.Object);
-            var controller= new DishController(mockDbContext.Object);
+
+            var mockLogger = new Mock<ILogger<DishController>>();
+
+
+            var controller= new DishController(mockDbContext.Object, mockLogger.Object);
 
             //Act
             var result = await controller.Index();
