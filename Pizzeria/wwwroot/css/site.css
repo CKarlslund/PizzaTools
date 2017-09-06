@@ -9,6 +9,9 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 
+div {
+    padding: 5px;
+}
 
 .body-content {
     padding-left: 15px;
@@ -147,7 +150,6 @@ div.table-title {
     border-collapse: collapse;
     height: 320px;
     margin: auto;
-    max-width: 600px;
     padding:5px;
     width: 100%;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
@@ -218,13 +220,14 @@ tr:last-child td:last-child {
  
 td {
     background:#FFFFFF;
-    padding:20px;
+    padding:10px;
     text-align:left;
     vertical-align:middle;
     font-weight:300;
     font-size:1em;
     text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
     border-right: 1px solid #C1C3D1;
+    width: 50px;
 }
 
 td:last-child {
