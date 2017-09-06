@@ -12,19 +12,85 @@
     <title>Your order</title>
 </head>
 <body>
-<div>
-    @{
-        foreach (var basketItem in order.Basket.Items)
-        {
-            <div>
-                @basketItem.Dish.Name
-            </div>
-        }
-    }
+<div style="margin-right:2%; width:48%">
+    <table class="payTable" style="width: 48%;">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            foreach (var basketItem in order.Basket.Items)
+            {
+                var price = basketItem.Dish.Price * basketItem.Quantity;
+            
+                <tr>
+                    <td>
+                        @basketItem.Dish.Name
+                    </td>
+                    <td>
+                        @basketItem.Quantity
+                    </td>
+                    <td>
+                        @price
+                    </td>
+                </tr>
+            }
+        }    
+        </tbody>
+        <tfoot>
+        <tr>
+            <td></td>
+            <td>Shipping</td>
+            <td>@order.Shipping</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Total</td>
+            <td>@order.Total</td>
+        </tr>
+        </tfoot>
+    </table>
+    <button>Change</button>
+</div>
 
-    <div>Shipping: @order.Shipping</div>
-    <div>Total: @order.Total</div>
-   
+<div style="width: 50%">
+<table class="payTable"style="width: 50%">
+    <thead>
+    <tr>
+        <th>
+            Shipping info
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>@Model.FirstName @Model.LastName</td>         
+    </tr>
+    <tr>
+        <td>@Model.PostingAddress</td>
+    </tr>
+    <tr>
+        <td>@Model.PostalCode @Model.City</td>
+    </tr>
+    </tbody>
+</table>
+    <button>Change</button>   
+</div>
+    
+<div class="col-md-12">
+    <div>
+        <a href="/youraction" data-paypal-button="true" style="float: left">
+            <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
+        </a>
+    </div>
+    <div>
+        <button class="btn btn-info">Pay</button>
+    </div>
+    
 </div>
 </body>
 </html>

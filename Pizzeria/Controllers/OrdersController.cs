@@ -172,6 +172,7 @@ namespace Pizzeria.Controllers
 
             var basket = _context.Baskets
                 .Include(b => b.Items)
+                .ThenInclude(c => c.Dish)
                 .FirstOrDefault(x => x.BasketId == order.Basket.BasketId);
 
             //Calculate total
@@ -227,13 +228,13 @@ namespace Pizzeria.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckoutInfo([Bind("Id, OrderId,FirstName,LastName,Email,PostingAddres,PostalCode,City,PhoneNumber")]CheckoutInfo checkoutInfo)
+        public async Task<IActionResult> CheckoutInfo([Bind("Id, OrderId,FirstName,LastName,Email,PostingAddress,PostalCode,City,PhoneNumber")]CheckoutInfo checkoutInfo)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.CheckoutInfo.Add(checkoutInfo);
+                    _context.CheckoutInfo.Update(checkoutInfo);
 
                     await _context.SaveChangesAsync();
 
