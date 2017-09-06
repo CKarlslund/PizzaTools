@@ -18,7 +18,7 @@ namespace Pizzeria.Services
         {
             var ingredients1= _context.Dishes.FirstOrDefault(x => x.DishId == dishId).DishIngredients.Select(y => y.Ingredient).ToList();
 
-            var ingredientsList = _context.Ingredients.ToList();
+            var ingredientsList = _context.Ingredients.OrderBy(x => x.Name).ToList();
 
             foreach (var ingredient in ingredientsList)
             {
@@ -33,9 +33,7 @@ namespace Pizzeria.Services
 
         public List<Ingredient> All()
         {
-            var temp = _context.Ingredients.OrderBy(x => x.Name).ToList();
-
-            return _context.Ingredients.ToList();
+            return _context.Ingredients.OrderBy(x => x.Name).ToList();
         }
     }
 }

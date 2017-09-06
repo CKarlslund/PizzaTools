@@ -13,7 +13,7 @@ using Xunit;
 
 namespace PizzeriaUnitTests
 {
-    public class DishControllerTests
+    public class DishControllerTests : BasePizzeriaTests
     {
         //[Fact]
         //public void PassingTest()
