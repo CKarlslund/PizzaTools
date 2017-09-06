@@ -89,7 +89,7 @@ namespace Pizzeria.Commands
 
             var temp = session.GetInt32("BasketId");
 
-           return Controller.RedirectToAction("Index");
+           return Controller.RedirectToAction("Index", "Home");
         }
 
         private void SaveBasket(Basket basket)

@@ -3,8 +3,6 @@
     
     @{
         var basket = BasketService.GetCurrentBasket(Context.Session);
-
-        var total = BasketService.GetTotal(Context.Session);
     }
 
 <div>
@@ -22,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        @{if (basket?.Items != null)
+        @{if (basket?.Items != null && basket?.Items.Count != 0)
           {
               foreach (var item in basket.Items)
               {
@@ -31,34 +29,60 @@
                           @item.Dish.Name
                       </td>
                       <td>
-                          <span><input asp-for="@item.Quantity" class="form-control" type="text" style="float:left;" method="post"/></span> 
-                        </td>
+                          <span><input asp-for="@item.Quantity" class="form-control quantity" type="text" style="float:left;" method="post"/></span> 
+                      </td>
                       <td>       
                           <div>
-                                <a href="javascript:void(0);" class="anchorDetail" data-id="@item.BasketItemId"><span class="glyphicon glyphicon-edit"></span></a>
+                              <a href="javascript:void(0);" class="anchorDetail" data-id="@item.BasketItemId"><span class="glyphicon glyphicon-edit"></span></a>
                           </div>
                       </td>
                   </tr>
-              }
+
+                }
+                <tr>
+                    <td></td>
+                    <td>
+                        <b>Subtotal:</b>
+                    </td>
+                    <td>
+                        @BasketService.GetTotal(Context.Session)
+                    </td>
+                </tr>
+            }
+            else
+            {
+              <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+              </tr>
           }
-        }
-        <tr>
-            <td>
-                <b>SubTotal:</b>
-            </td>
-            <td>
-                @total <button  type="submit" name="UpdateQuantity-@basket.BasketId"><span class="glyphicon glyphicon-refresh"></span></button>
-            </td>
-        </tr>
-        </tbody>
+        }        
+        </tbody>        
     </table>
 </div>
 
-<div>
-    <button class="btn btn-info checkout" type="submit" name="Checkout-@basket.BasketId">
-        CHECKOUT
-    </button>
-</div>
+@{
+    if (basket?.Items != null && basket?.Items.Count != 0)
+    {
+        <div>
+            <button class="btn btn-info" type="submit" name="Checkout-@basket.BasketId">
+                CHECKOUT
+            </button>
+        </div>
+    }
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+        <script type="text/javascript">
+        $('.quantity').change(function () {
+
+            $('#MainForm').append('<input type="hidden" name="GetTotal-@basket?.BasketId"/>');
+            $('#MainForm').submit();
+        });
+</script>
+
 
 
 
