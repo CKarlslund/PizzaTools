@@ -41,10 +41,14 @@ namespace Pizzeria.Commands
 
                 var user = context.Users.FirstOrDefault(x => x.Id == userId);
 
-                return Controller.RedirectToAction("Payment", "Orders", new {Basket = basket, User = user});
+                user.Orders.Add(order);
+
+                await context.SaveChangesAsync();
+
+                return Controller.RedirectToAction("Payment", "Orders", user);
             }
 
-            return Controller.RedirectToAction("LoginOrAnonymous", "Orders", new { Basket = basket});
+            return Controller.RedirectToAction("LoginOrAnonymous", "Orders");
         }
     }
 }

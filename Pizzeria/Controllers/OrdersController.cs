@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
@@ -13,10 +16,12 @@ namespace Pizzeria.Controllers
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<OrdersController> _logger;     
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, ILogger<OrdersController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Orders
@@ -157,22 +162,90 @@ namespace Pizzeria.Controllers
             return _context.Order.Any(e => e.OrderId == id);
         }
 
-        public IActionResult Payment(Basket basket, ApplicationUser user)
+        public IActionResult Payment(CheckoutInfo checkoutInfo)
         {
-            throw new NotImplementedException();
+            //var checkoutInfo = _context.CheckoutInfo;
+
+            var order = _context.Order
+                .Include(o => o.Basket)
+                .FirstOrDefault(x => x.OrderId == checkoutInfo.OrderId);
+
+            var basket = _context.Baskets
+                .Include(b => b.Items)
+                .FirstOrDefault(x => x.BasketId == order.Basket.BasketId);
+
+            //Calculate total
+            var total = 0;
+
+            foreach (var basketItem in basket.Items)
+            {
+                total += (basketItem.Quantity * basketItem.Dish.Price);
+            }
+
+            var shipping = 0;
+
+            if (basket.Items.Count < 5)
+            {
+                shipping = 49;
+            }
+            
+            total += shipping;
+
+            order.Total = total;
+            order.Shipping = shipping;
+            _context.SaveChanges();
+
+            return View(checkoutInfo);
         }
 
-        public IActionResult LoginOrAnonymous(Basket basket)
+        public async Task<IActionResult> LoginOrAnonymous()
         {
-            var user = new ApplicationUser();
-            var order = new Order()
+            var basketId = HttpContext.Session.GetInt32("BasketId");
+            var basket = _context.Baskets
+                .Include(x => x.Items)
+                .ThenInclude(y => y.BasketItemIngredients)
+                .Include(z => z.Items)
+                .ThenInclude(h => h.Dish)
+                .ThenInclude(j => j.DishIngredients)
+                .ThenInclude(k => k.Ingredient)
+                .FirstOrDefault(x => x.BasketId == basketId);
+
+            var order = new Order
             {
                 Basket = basket
             };
 
-            user.Orders.Add(order);
+            _context.Order.Add(order);
+            await _context.SaveChangesAsync();
 
-            return View(user);
+            var checkoutInfo = new CheckoutInfo {OrderId = order.OrderId};
+
+            _context.CheckoutInfo.Add(checkoutInfo);
+            await _context.SaveChangesAsync();
+
+            return View(checkoutInfo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckoutInfo([Bind("Id, OrderId,FirstName,LastName,Email,PostingAddres,PostalCode,City,PhoneNumber")]CheckoutInfo checkoutInfo)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.CheckoutInfo.Add(checkoutInfo);
+
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Payment", checkoutInfo);
+                }
+                catch (DbUpdateConcurrencyException exc)
+                {                   
+                    _logger.LogError(exc.ToString());
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View("LoginOrAnonymous", checkoutInfo);                        
         }
     }
 }

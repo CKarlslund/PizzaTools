@@ -11,6 +11,9 @@ namespace Pizzeria.Models
         public bool Finished { get; set; } = false;
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
+        public int Shipping { get; set; }
+        public int Total { get; set; }
+
         public int ApplicationUserId { get; set; }
         public ApplicationUser User { get; set; }
 

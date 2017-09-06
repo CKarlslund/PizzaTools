@@ -1,0 +1,30 @@
+﻿@model CheckoutInfo
+@inject Pizzeria.Services.OrderService OrderService
+
+@{
+    var order = OrderService.GetOrder(Model.OrderId);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Your order</title>
+</head>
+<body>
+<div>
+    @{
+        foreach (var basketItem in order.Basket.Items)
+        {
+            <div>
+                @basketItem.Dish.Name
+            </div>
+        }
+    }
+
+    <div>Shipping: @order.Shipping</div>
+    <div>Total: @order.Total</div>
+   
+</div>
+</body>
+</html>

@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 namespace Pizzeria.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUser : IdentityUser
+    public class CheckoutInfo
     {
-        [Display(Name = "User name")]
-        public override string UserName { get; set; }
+        public int Id { get; set; }
+        public int OrderId { get; set; }
 
         [Display(Name = "First name")]
         public string FirstName { get; set; }
 
         [Display(Name = "Last name")]
         public string LastName { get; set; }
+
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         [Display(Name = "Posting address")]
         public string PostingAddress { get; set; }
@@ -27,6 +26,7 @@ namespace Pizzeria.Models
 
         public string City { get; set; }
 
-        public List<Order> Orders {get; set; }
+        [Display(Name = "Phone number")]
+        public int PhoneNumber { get; set; }       
     }
 }

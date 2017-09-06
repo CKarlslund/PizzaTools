@@ -1,4 +1,4 @@
-﻿@model ApplicationUser
+﻿@model CheckoutInfo
 
 @{
     ViewBag.Title = "title";
@@ -7,54 +7,64 @@
 
 <h2>Login or continue anonymously</h2>
 
-<button>Login</button>
+<div>
+    <button class="btn btn-default">Login</button>
+</div>
 
---OR--
+<div>--OR--</div>
 
-<h4>ApplicationUser</h4>
+<h4>Enter your stuff</h4>
 <hr />
 <div class="row">
-<div class="col-md-4">
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="FirstName" class="control-label"></label>
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastName" class="control-label"></label>
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PostingAddress" class="control-label"></label>
-            <input asp-for="PostingAddress" class="form-control" />
-            <span asp-validation-for="PostingAddress" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PostalCode" class="control-label"></label>
-            <input asp-for="PostalCode" class="form-control" />
-            <span asp-validation-for="PostalCode" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="City" class="control-label"></label>
-            <input asp-for="City" class="form-control" />
-            <span asp-validation-for="City" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Email" class="control-label"></label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PhoneNumber" class="control-label"></label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </form>
+    <div class="col-md-4">
+        
+        <div>OrderId: @Model.OrderId ID: @Model.Id</div>
+
+        <form asp-action="CheckoutInfo" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OrderId"/>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="float: left;">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="float: left;">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="float: left;">
+                <label asp-for="PostingAddress" class="control-label"></label>
+                <input asp-for="PostingAddress" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="PostingAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="float: left;">
+                <label asp-for="PostalCode" class="control-label"></label>
+                <input asp-for="PostalCode" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="float: left;">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="float: left;">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group"style="float: left;">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" style="min-width: 150px"/>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div>
+                <input type="submit" value="Continue to payment" class="btn btn-default" style="width: 100%;"/>
+            </div>
+        </form>
+    </div>
 </div>
-</div>
+
