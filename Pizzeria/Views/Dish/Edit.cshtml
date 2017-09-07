@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
                 @{
-                    <select asp-for="Category" asp-items="@selectList"></select>
+                    <select asp-for="CategoryId" asp-items="@selectList"></select>
                 }
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>

@@ -18,7 +18,9 @@ namespace Pizzeria.Services
         
         public Basket GetCurrentBasket(ISession contextSession)
         {
-            var temp = _context.Baskets.Include(y => y.Items).FirstOrDefault(x => x.BasketId == GetCurrentBasketId(contextSession));
+            var temp1 = GetCurrentBasketId(contextSession);
+
+            var temp = _context.Baskets.Include(y => y.Items).FirstOrDefault(x => x.BasketId == temp1);
             return temp;
         }
 

@@ -9,6 +9,7 @@
 
 <html>
 <head>
+
     <title>Your order</title>
 </head>
 <body>
@@ -128,21 +129,91 @@
         <button class="btn btn-default" type="submit">Save changes</button>   
     </div>
 </form>
-    
+
 <div class="col-md-12">
     <div>
-        <a href="/youraction" data-paypal-button="true" style="float: left">
-            <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
-        </a>
+        <h2>Choose payment method</h2>
+    </div>
+    @*Pay with MasterCard*@
+    <div><button class="btn btn-default" id="MasterCardBtn">Master Card</button></div>
+    <div hidden id="PayMaster">
+            <ul>  
+                <li><input type='text' id="MasterNumber" placeholder="Enter Credit card number"/></li>  
+                <li>&nbsp;</li>  
+                <li><button id="ValidateMasterBtn"class="btn btn-default"></button></li>  
+                <li>&nbsp;</li>  
+            </ul>  
+    </div>
+    @*Pay with Visa*@
+    <div><button class="btn btn-default" id="VisaBtn">Visa</a></div>
+    <div hidden id="PayVisa">
+        <form name="VisaForm" asp-action="LastPayment"> 
+            Credit card number
+            <ul>  
+                <li><input type='text' name='text1'/></li>  
+                <li>&nbsp;</li>  
+                <li class="submit"><input type="submit" name="submit" value="Submit" onclick="cardnumberVisa(document.VisaForm.text1)"/></li>  
+                <li>&nbsp;</li>  
+            </ul>  
+        </form>  
     </div>
     
+    --OR--
+    <h3>Pay with Paypal</h3>
+    <div>
+        <a data-paypal-button="true" style="float: left">
+            <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal"/>
+        </a>
+    </div>
+
 </div>
-    
+
 <script type="text/javascript">
-    document.getElementById("ChangeBtn").addEventListener('click', function() {
-        document.getElementById("AddressTable").style.display = 'none';
-        document.getElementById("ChangeForm").style.display = 'block';
-    })
+    document.getElementById("ChangeBtn").addEventListener('click',
+        function() {
+            document.getElementById("AddressTable").style.display = 'none';
+            document.getElementById("ChangeForm").style.display = 'block';
+        });
+
+    document.getElementById("VisaBtn").addEventListener('click', function() {
+        document.getElementById("PayMaster").style.display = 'none';
+        document.getElementById("PayVisa").style.display = 'block';
+    });
+
+    document.getElementById("MasterCardBtn").addEventListener('click', function() {
+        document.getElementById("PayVisa").style.display = 'none';
+        document.getElementById("PayMaster").style.display = 'block';
+    });
+
+    //Credit card validation
+    document.getElementById("ValidateMasterBtn").addEventListener('click', function () {
+        var inputTxt = document.getElementById("MasterNumber");
+        var cardno = /^(?:5[1-5][0-9]{14})$/;
+        if (inputTxt.value.match(cardno)) {
+
+            var url = '@Url.Action("Confirmation", "Orders")';
+            window.location.href = url;
+        }
+        else {
+            alert("Not a valid Mastercard number!");
+        }
+    });
+
+    function cardnumberMaster(inputtxt) {
+        
+    }  
+
+    function cardnumberVisa(inputtxt) {
+        var cardno = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
+        if (inputtxt.value.match(cardno)) {
+            alert("Thank you for your payment!");
+            return true;
+        }
+        else {
+            alert("Not a valid Visa credit card number!");
+            return false;
+        }
+    }  
 </script>
 </body>
 </html>

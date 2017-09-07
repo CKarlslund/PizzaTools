@@ -26,7 +26,5 @@ namespace Pizzeria.Models
         public int PostalCode { get; set; }
 
         public string City { get; set; }
-
-        public List<Order> Orders {get; set; }
     }
 }

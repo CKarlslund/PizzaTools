@@ -15,11 +15,6 @@ namespace Pizzeria.Data
         {
         }
 
-        public ApplicationDbContext()
-        {
-            
-        }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<DishIngredient>()

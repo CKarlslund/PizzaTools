@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace Pizzeria.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
+            Console.WriteLine($"Sent email to {email}");
+            Debug.WriteLine($"Sent email to {email}");
             return Task.CompletedTask;
         }
     }

@@ -24,6 +24,26 @@ namespace Pizzeria.Services
             return _context.Categories.ToList();
         }
 
+        public List<SelectListItem> GetSelectList()
+        {
+            var categories = _context.Categories.OrderBy(c => c.Name).ToList();
+
+            var list = new List<SelectListItem>();
+
+            foreach (var category in categories)
+            {                
+                var newItem = new SelectListItem()
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.Name,
+                };
+
+                list.Add(newItem);
+            }
+
+            return list;
+        }
+
         public List<SelectListItem> GetSelectList(int dishId)
         {
             var categories = _context.Categories.OrderBy(c => c.Name).ToList();

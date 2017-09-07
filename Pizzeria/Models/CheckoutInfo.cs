@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Security.AccessControl;
 
 namespace Pizzeria.Models
 {
@@ -28,5 +29,7 @@ namespace Pizzeria.Models
 
         [Display(Name = "Phone number")]
         public int PhoneNumber { get; set; }       
+
+        public string PaymentAuthorizationCode { get; set; }
     }
 }

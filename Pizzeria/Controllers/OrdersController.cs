@@ -9,19 +9,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
+using Pizzeria.Extensions;
 using Pizzeria.Models;
+using Pizzeria.Services;
 
 namespace Pizzeria.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<OrdersController> _logger;     
+        private readonly ILogger<OrdersController> _logger;
+        private readonly IEmailSender _emailSender;
 
-        public OrdersController(ApplicationDbContext context, ILogger<OrdersController> logger)
+        public OrdersController(ApplicationDbContext context, ILogger<OrdersController> logger, IEmailSender emailSender)
         {
             _context = context;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: Orders
@@ -185,7 +189,7 @@ namespace Pizzeria.Controllers
 
             var shipping = 0;
 
-            if (basket.Items.Count < 5)
+            if (total < 500)
             {
                 shipping = 49;
             }
@@ -197,6 +201,14 @@ namespace Pizzeria.Controllers
             _context.SaveChanges();
 
             return View(checkoutInfo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Confirmation(int id)
+        {
+
+            //_emailSender.SendEmailAsync("asdf@gmail.com");
+            return RedirectToAction("Payment");
         }
 
         public async Task<IActionResult> LoginOrAnonymous()

@@ -25,7 +25,6 @@ namespace Pizzeria.Commands
             var order = new Order
             {
                 Basket = basket,
-                User = new ApplicationUser()
             };
 
 
@@ -35,7 +34,9 @@ namespace Pizzeria.Commands
 
                 var user = context.Users.FirstOrDefault(x => x.Id == userId);
 
-                user.Orders.Add(order);
+                //user.Orders.Add(order);
+
+                order.User = user;
 
                 await context.SaveChangesAsync();
 
