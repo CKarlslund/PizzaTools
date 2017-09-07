@@ -12,7 +12,7 @@
     <title>Your order</title>
 </head>
 <body>
-<div style="margin-right:2%; width:48%">
+<div style="float: left; margin-right:2%; width:48%">
     <table class="payTable" style="width: 48%;">
         <thead>
         <tr>
@@ -54,32 +54,80 @@
         </tr>
         </tfoot>
     </table>
-    <button>Change</button>
 </div>
+    
+    
+<div style="float: left;width: 50%" id="AddressTable">
+    <table class="payTable"style="width: 50%">
+        <thead>
+        <tr>
+            <th>
+                Posting address
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@Model.FirstName @Model.LastName</td>         
+        </tr>
+        <tr>
+            <td>@Model.PostingAddress</td>
+        </tr>
+        <tr>
+            <td>@Model.PostalCode @Model.City</td>
+        </tr>
+        <tr>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <td>@Model.PhoneNumber</td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-default" id="ChangeBtn">Change</button>   
+</div>
+    
+@*Change shipping address form*@
+<form asp-action="Payment" id="ChangeForm"hidden>
+    <div style="float: left;width: 50%">
+        <table class="payTable"style="width: 50%">
+            <thead>
+            <tr>
+                <th>
+                    Recipient information
+                </th>
+            </tr>
+            </thead>
+            <tbody>           
+            <tr>
+                <td>
+                    <input asp-for="Id"type="hidden"/>
+                    <input asp-for="OrderId" type="hidden"/>
 
-<div style="width: 50%">
-<table class="payTable"style="width: 50%">
-    <thead>
-    <tr>
-        <th>
-            Shipping info
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>@Model.FirstName @Model.LastName</td>         
-    </tr>
-    <tr>
-        <td>@Model.PostingAddress</td>
-    </tr>
-    <tr>
-        <td>@Model.PostalCode @Model.City</td>
-    </tr>
-    </tbody>
-</table>
-    <button>Change</button>   
-</div>
+                    <input asp-for="FirstName" type="text" value="@Model.FirstName"/>
+                    <input asp-for="LastName" type="text" value="@Model.LastName"/>
+                </td>
+            </tr>
+            <tr>
+                <td><input asp-for="PostingAddress" type="text" value="@Model.PostingAddress"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input asp-for="PostalCode" type="number" value="@Model.PostalCode"/>
+                    <input asp-for="City" type="text" value="@Model.City"/>
+                </td>
+            </tr>
+            <tr>
+                <td><input asp-for="Email" type="email" value="@Model.Email"/></td>
+            </tr>
+            <tr>
+                <td><input asp-for="PhoneNumber" type="number" value="@Model.PhoneNumber"/></td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-default" type="submit">Save changes</button>   
+    </div>
+</form>
     
 <div class="col-md-12">
     <div>
@@ -87,10 +135,14 @@
             <img src="//www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Check out with PayPal" />
         </a>
     </div>
-    <div>
-        <button class="btn btn-info">Pay</button>
-    </div>
     
 </div>
+    
+<script type="text/javascript">
+    document.getElementById("ChangeBtn").addEventListener('click', function() {
+        document.getElementById("AddressTable").style.display = 'none';
+        document.getElementById("ChangeForm").style.display = 'block';
+    })
+</script>
 </body>
 </html>
