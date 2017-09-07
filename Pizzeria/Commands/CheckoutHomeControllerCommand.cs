@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pizzeria.Extensions;
 using Pizzeria.Models;
 
 namespace Pizzeria.Commands
@@ -34,13 +35,26 @@ namespace Pizzeria.Commands
 
                 var user = context.Users.FirstOrDefault(x => x.Id == userId);
 
-                //user.Orders.Add(order);
-
                 order.User = user;
+                context.AddOrUpdate(order);
+                await context.SaveChangesAsync();
+
+                var checkoutInfo = new CheckoutInfo()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PostingAddress = user.PostingAddress
+                    ,PostalCode = user.PostalCode,
+                    City = user.City,
+                    Email = user.Email,
+                    PhoneNumber = Convert.ToInt32(user.PhoneNumber),
+                    OrderId = order.OrderId
+                };
+                context.AddOrUpdate(checkoutInfo);
 
                 await context.SaveChangesAsync();
 
-                return Controller.RedirectToAction("Payment", "Orders", user);
+                return Controller.RedirectToAction("Payment", "Orders", checkoutInfo);
             }
 
             return Controller.RedirectToAction("LoginOrAnonymous", "Orders");
