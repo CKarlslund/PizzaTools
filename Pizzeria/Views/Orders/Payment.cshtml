@@ -104,24 +104,24 @@
                     <input asp-for="Id"type="hidden"/>
                     <input asp-for="OrderId" type="hidden"/>
 
-                    <input asp-for="FirstName" type="text" value="@Model.FirstName"/>
-                    <input asp-for="LastName" type="text" value="@Model.LastName"/>
+                    <input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="First name"/>
+                    <input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Last Name"/>
                 </td>
             </tr>
             <tr>
-                <td><input asp-for="PostingAddress" type="text" value="@Model.PostingAddress"/></td>
+                <td><input asp-for="PostingAddress" type="text" value="@Model.PostingAddress" placeholder="Posting address"/></td>
             </tr>
             <tr>
                 <td>
-                    <input asp-for="PostalCode" type="number" value="@Model.PostalCode"/>
-                    <input asp-for="City" type="text" value="@Model.City"/>
+                    <input asp-for="PostalCode" type="number" value="@Model.PostalCode" placeholder="Postal code"/>
+                    <input asp-for="City" type="text" value="@Model.City" placeholder="City"/>
                 </td>
             </tr>
             <tr>
-                <td><input asp-for="Email" type="email" value="@Model.Email"/></td>
+                <td><input asp-for="Email" type="email" value="@Model.Email" placeholder="Email"/></td>
             </tr>
             <tr>
-                <td><input asp-for="PhoneNumber" type="number" value="@Model.PhoneNumber"/></td>
+                <td><input asp-for="PhoneNumber" type="number" value="@Model.PhoneNumber" placeholder="Phone Number"/></td>
             </tr>
             </tbody>
         </table>
