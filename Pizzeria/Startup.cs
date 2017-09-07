@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using Pizzeria.Data;
 using Pizzeria.Models;
 using Pizzeria.Services;
@@ -26,11 +28,11 @@ namespace Pizzeria
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseInMemoryDatabase("DefaultConnection"));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -92,6 +94,19 @@ namespace Pizzeria
             app.UseAuthentication();
 
             app.UseSession();
+
+            app.Use((httpContext, nextMiddleware) =>
+            {
+                string acceptLanguages = httpContext.Request.Headers[HeaderNames.AcceptLanguage];
+                string[] langs = acceptLanguages.Split(",");
+                CultureInfo cultureInfo = new CultureInfo(langs[0]);  // använd "sv" eller "sv-SE" om du vill hårdkoda språket istället
+                CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+                return nextMiddleware();
+            });
+
+            app.UseStaticFiles();
+
 
             app.UseMvc(routes =>
             {

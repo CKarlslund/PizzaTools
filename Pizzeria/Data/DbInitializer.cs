@@ -24,7 +24,7 @@ namespace Pizzeria.Data
             {
                 var userRole = new IdentityRole() { Name = "User" };
                 var roleResult = roleManager.CreateAsync(userRole).Result;
-                userManager.AddToRoleAsync(aUser, userRole.Name);
+                var identityResult = userManager.AddToRoleAsync(aUser, userRole.Name).Result;
             }
 
             var adminUser = new ApplicationUser()
@@ -39,7 +39,7 @@ namespace Pizzeria.Data
             {
                 var adminRole = new IdentityRole(){Name = "Admin"};
                 var roleResult = roleManager.CreateAsync(adminRole).Result;
-                userManager.AddToRoleAsync(adminUser, adminRole.Name);
+                var identityResult = userManager.AddToRoleAsync(adminUser, adminRole.Name).Result;
             }
 
             if (context.Dishes.ToList().Count == 0)
