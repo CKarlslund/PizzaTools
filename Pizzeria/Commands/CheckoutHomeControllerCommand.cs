@@ -36,6 +36,7 @@ namespace Pizzeria.Commands
                 var user = context.Users.FirstOrDefault(x => x.Id == userId);
 
                 order.User = user;
+                order.BasketId = basket.BasketId;
                 context.AddOrUpdate(order);
                 await context.SaveChangesAsync();
 

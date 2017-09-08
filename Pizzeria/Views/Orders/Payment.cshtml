@@ -137,25 +137,24 @@
     @*Pay with MasterCard*@
     <div><button class="btn btn-default" id="MasterCardBtn">Master Card</button></div>
     <div hidden id="PayMaster">
-            <ul>  
-                <li><input type='text' id="MasterNumber" placeholder="Enter Credit card number"/></li>  
-                <li>&nbsp;</li>  
-                <li><button id="ValidateMasterBtn"class="btn btn-default"></button></li>  
-                <li>&nbsp;</li>  
-            </ul>  
+        <div>Enter your credit card number</div>
+        <div>
+            <input type='number' id="MasterNumber" placeholder="Enter Credit card number" style="width:200px"/>
+        </div>
+        <div>
+            <button id="ValidateMasterBtn" class="btn btn-info">Pay</button>
+        </div>
     </div>
     @*Pay with Visa*@
-    <div><button class="btn btn-default" id="VisaBtn">Visa</a></div>
+    <div><button class="btn btn-default" id="VisaBtn">Visa</button></div>
     <div hidden id="PayVisa">
-        <form name="VisaForm" asp-action="LastPayment"> 
-            Credit card number
-            <ul>  
-                <li><input type='text' name='text1'/></li>  
-                <li>&nbsp;</li>  
-                <li class="submit"><input type="submit" name="submit" value="Submit" onclick="cardnumberVisa(document.VisaForm.text1)"/></li>  
-                <li>&nbsp;</li>  
-            </ul>  
-        </form>  
+        <div>Enter your credit card number</div>
+        <div>
+            <input type='number' id="VisaNumber" placeholder="Enter Credit card number" style="width:200px" />
+        </div>
+        <div>
+            <button id="ValidateVisaBtn" class="btn btn-info">Pay</button>
+        </div>
     </div>
     
     --OR--
@@ -199,21 +198,19 @@
         }
     });
 
-    function cardnumberMaster(inputtxt) {
-        
-    }  
-
-    function cardnumberVisa(inputtxt) {
+    document.getElementById("ValidateVisaBtn").addEventListener('click', function () {
+        var inputTxt = document.getElementById("VisaNumber");
         var cardno = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
-        if (inputtxt.value.match(cardno)) {
-            alert("Thank you for your payment!");
-            return true;
+        if (inputTxt.value.match(cardno)) {
+
+            var url = '@Url.Action("Confirmation", "Orders")';
+            window.location.href = url;
         }
         else {
-            alert("Not a valid Visa credit card number!");
-            return false;
+            alert("Not a valid Visa number!");
         }
-    }  
+    });
+      
 </script>
 </body>
 </html>

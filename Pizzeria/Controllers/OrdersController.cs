@@ -203,12 +203,30 @@ namespace Pizzeria.Controllers
             return View(checkoutInfo);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Confirmation(int id)
+        public async Task<IActionResult> Confirmation()
         {
+            var basketId = 0;
 
-            //_emailSender.SendEmailAsync("asdf@gmail.com");
-            return RedirectToAction("Payment");
+            var sessionId = HttpContext.Session.GetInt32("BasketId");
+            if (sessionId != null)
+            {
+                basketId = sessionId.Value;
+            }
+
+            var order = _context.Order
+                .FirstOrDefault(x => x.BasketId == basketId);
+
+            var checkoutInfo = _context.CheckoutInfo.FirstOrDefault(x => x.OrderId == order.OrderId);
+
+            //Send message to baker
+            var bakerMessage = $"You have a new order with order id {order.OrderId}. <br><br>To view your new order, please go to www.pizzatools.com/orders <br><br>Happy baking!";
+            await _emailSender.SendEmailAsync("asdf@gmail.com", "New order!", bakerMessage);
+
+            //Send message to customer
+            var customerMessage = $"Thank you for ordering from PizzaTools! Your item will arrive shortly. <br><br>Your order Id is {order.OrderId}.<br><br>Thank you!";
+            await _emailSender.SendEmailAsync(checkoutInfo.Email, "Thank you for your order!", customerMessage);
+            
+            return View(order.OrderId);
         }
 
         public async Task<IActionResult> LoginOrAnonymous()
