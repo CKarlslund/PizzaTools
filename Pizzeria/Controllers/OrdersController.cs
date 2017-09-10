@@ -280,16 +280,19 @@ namespace Pizzeria.Controllers
                
                 await _context.SaveChangesAsync();
 
-                var chOutInfo = _context.CheckoutInfo.Last();
+                var chOutInfo = new CheckoutInfo
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PostingAddress = user.PostingAddress,
+                    PostalCode = user.PostalCode,
+                    City = user.City,
+                    Email = user.Email,
+                    PhoneNumber = Convert.ToInt32(user.PhoneNumber),
+                    OrderId = order.OrderId
+                };
 
-                chOutInfo.FirstName = user.FirstName;
-                chOutInfo.LastName = user.LastName;
-                chOutInfo.PostingAddress = user.PostingAddress;
-                chOutInfo.PostalCode = user.PostalCode;
-                chOutInfo.City = user.City;
-                chOutInfo.Email = user.Email;
-                chOutInfo.PhoneNumber = Convert.ToInt32(user.PhoneNumber);
-                
+
                 _context.AddOrUpdate(chOutInfo);
                 _context.AddOrUpdate(order);
                 order.BasketId = basketId;
@@ -298,14 +301,13 @@ namespace Pizzeria.Controllers
 
                 HttpContext.Session.Remove("LoggedInBefore");
 
-                return RedirectToAction("CheckoutInfo", chOutInfo);
+                return RedirectToAction("Payment", chOutInfo);
             }
 
             _context.AddOrUpdate(order);
             await _context.SaveChangesAsync();
 
             var checkoutInfo = new CheckoutInfo {OrderId = order.OrderId};
-            _context.AddOrUpdate(checkoutInfo);
 
             order.BasketId = basketId;
             await _context.SaveChangesAsync();
