@@ -18,18 +18,34 @@ namespace Pizzeria
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IHostingEnvironment _env;
+        public static IConfiguration Configuration;
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
+            _env = env;
         }
 
-        public IConfiguration Configuration { get; }
+        //public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            switch (_env.EnvironmentName)
+            {
+                case "Development":
+                    services.AddEntityFrameworkSqlServer()
+                        .AddDbContext<ApplicationDbContext>(options =>
+                            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    break;
+                case "DevInMem":
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                        options.UseInMemoryDatabase("DefaultConnection"));
+                    break;
+            }
+
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseInMemoryDatabase("DefaultConnection"));
