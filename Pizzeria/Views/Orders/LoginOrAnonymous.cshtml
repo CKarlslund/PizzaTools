@@ -8,7 +8,7 @@
 <h2>Login or continue anonymously</h2>
 
 <div>
-    <button class="btn btn-default">Login</button>
+    <a asp-action="Login" asp-controller="Account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">Login</a>
 </div>
 
 <div>--OR--</div>

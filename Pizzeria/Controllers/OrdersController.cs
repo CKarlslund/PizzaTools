@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Pizzeria.Commands;
 using Pizzeria.Data;
 using Pizzeria.Extensions;
 using Pizzeria.Models;
@@ -166,6 +169,7 @@ namespace Pizzeria.Controllers
             return _context.Order.Any(e => e.OrderId == id);
         }
 
+
         public IActionResult Payment(CheckoutInfo checkoutInfo)
         {
             //var checkoutInfo = _context.CheckoutInfo;
@@ -225,13 +229,24 @@ namespace Pizzeria.Controllers
             //Send message to customer
             var customerMessage = $"Thank you for ordering from PizzaTools! Your item will arrive shortly. <br><br>Your order Id is {order.OrderId}.<br><br>Thank you!";
             await _emailSender.SendEmailAsync(checkoutInfo.Email, "Thank you for your order!", customerMessage);
+
+            HttpContext.Session.Clear();
             
             return View(order.OrderId);
         }
 
         public async Task<IActionResult> LoginOrAnonymous()
         {
-            var basketId = HttpContext.Session.GetInt32("BasketId");
+
+            ViewData["ReturnUrl"] = HttpContext.Request.GetUri().AbsolutePath;
+
+            var basketId = 0;
+
+            if (HttpContext.Session.GetInt32("BasketId") != null)
+            {
+                basketId = HttpContext.Session.GetInt32("BasketId").Value;
+            }
+
             var basket = _context.Baskets
                 .Include(x => x.Items)
                 .ThenInclude(y => y.BasketItemIngredients)
@@ -246,14 +261,57 @@ namespace Pizzeria.Controllers
                 Basket = basket
             };
 
-            _context.Order.Add(order);
+            if (User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Session.GetInt32("LoggedInBefore") != null)
+                {
+                    order = _context.Order
+                        .Include(x => x.Basket)
+                        .ThenInclude(y => y.Items)
+                        .ToList().Last();
+                }
+                
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                var user = _context.Users.FirstOrDefault(x => x.Id == userId);
+
+                order.User = user;
+                _context.AddOrUpdate(order);
+               
+                await _context.SaveChangesAsync();
+
+                var chOutInfo = _context.CheckoutInfo.Last();
+
+                chOutInfo.FirstName = user.FirstName;
+                chOutInfo.LastName = user.LastName;
+                chOutInfo.PostingAddress = user.PostingAddress;
+                chOutInfo.PostalCode = user.PostalCode;
+                chOutInfo.City = user.City;
+                chOutInfo.Email = user.Email;
+                chOutInfo.PhoneNumber = Convert.ToInt32(user.PhoneNumber);
+                
+                _context.AddOrUpdate(chOutInfo);
+                _context.AddOrUpdate(order);
+                order.BasketId = basketId;
+
+                await _context.SaveChangesAsync();
+
+                HttpContext.Session.Remove("LoggedInBefore");
+
+                return RedirectToAction("CheckoutInfo", chOutInfo);
+            }
+
+            _context.AddOrUpdate(order);
             await _context.SaveChangesAsync();
 
             var checkoutInfo = new CheckoutInfo {OrderId = order.OrderId};
+            _context.AddOrUpdate(checkoutInfo);
 
-            _context.CheckoutInfo.Add(checkoutInfo);
+            order.BasketId = basketId;
             await _context.SaveChangesAsync();
 
+            HttpContext.Session.SetInt32("LoggedInBefore", 1);
+          
             return View(checkoutInfo);
         }
 
