@@ -14,11 +14,11 @@ namespace Pizzeria.Commands
     {
         public override async Task<IActionResult> Execute(object id, IFormCollection formCollection)
         {
-            var cartItemId = Convert.ToInt32(id);
+            var basketItemId = Convert.ToInt32(id);
             var dish = Context.Dishes
                 .Include(y => y.DishIngredients)
                 .ThenInclude(z => z.Ingredient)
-                .FirstOrDefault(x => x.DishId == cartItemId);
+                .FirstOrDefault(x => x.DishId == basketItemId);
 
             Basket basket;
             var session = Controller.HttpContext.Session;
@@ -57,9 +57,9 @@ namespace Pizzeria.Commands
                     .SingleOrDefault(x => x.BasketId == basketId)
                          ?? new Basket();
 
-                if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId))
+                if (basket.Items != null && basket.Items.Exists(basketItem => basketItem.DishId == dish.DishId && basketItem.Name == null))
                 {
-                    var existingItem = basket.Items.FirstOrDefault(x => x.DishId == dish.DishId);
+                    var existingItem = basket.Items.FirstOrDefault(x => x.DishId == dish.DishId && x.Name == null);
                     existingItem.Quantity++;
                 }
                 else

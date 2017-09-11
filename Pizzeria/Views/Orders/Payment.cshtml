@@ -29,9 +29,16 @@
                 var price = basketItem.Dish.Price * basketItem.Quantity;
             
                 <tr>
-                    <td>
-                        @basketItem.Dish.Name
-                    </td>
+                        @{
+                            if (basketItem.Name != null)
+                            {
+                                <td>@basketItem.Name</td>                               
+                            }
+                            else
+                            {
+                                <td>@basketItem.Dish.Name</td>
+                            }
+                        }
                     <td>
                         @basketItem.Quantity
                     </td>

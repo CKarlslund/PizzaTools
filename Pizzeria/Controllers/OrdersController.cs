@@ -34,7 +34,15 @@ namespace Pizzeria.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Order.Include(o => o.Basket);
+            var applicationDbContext = _context.Order
+                .Include(o => o.Basket)
+                .ThenInclude(x => x.Items)
+                .ThenInclude(y => y.Dish)
+                .Include(y => y.Basket)
+                .ThenInclude(f => f.Items)
+                .ThenInclude(g => g.BasketItemIngredients)
+                .ThenInclude(h => h.Ingredient);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -172,7 +180,7 @@ namespace Pizzeria.Controllers
 
         public IActionResult Payment(CheckoutInfo checkoutInfo)
         {
-            //var checkoutInfo = _context.CheckoutInfo;
+            
 
             var order = _context.Order
                 .Include(o => o.Basket)

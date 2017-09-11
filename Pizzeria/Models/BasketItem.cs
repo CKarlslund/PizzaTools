@@ -8,6 +8,8 @@ namespace Pizzeria.Models
     public class BasketItem
     {
         public int BasketItemId { get; set; }
+
+        public string Name { get; set; }
         public Basket Basket { get; set; }
 
         public int Quantity { get; set; }

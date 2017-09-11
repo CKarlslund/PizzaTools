@@ -26,7 +26,16 @@
               {
                   <tr>
                       <td>
-                          @item.Dish.Name
+                          @{
+                              if (item.Name == null)
+                              {
+                                  @item.Dish.Name;
+                              }
+                              else
+                              {
+                                   @item.Name;
+                              }
+                          }
                       </td>
                       <td>
                           <span><input asp-for="@item.Quantity" class="form-control quantity" type="text" style="float:left;" method="post"/></span> 
