@@ -111,25 +111,40 @@
                 <td>
                     <input asp-for="Id"type="hidden"/>
                     <input asp-for="OrderId" type="hidden"/>
-
+                    
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="First name"/>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+
                     <input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Last Name"/>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </td>
-            </tr>
-            <tr>
-                <td><input asp-for="PostingAddress" type="text" value="@Model.PostingAddress" placeholder="Posting address"/></td>
             </tr>
             <tr>
                 <td>
-                    <input asp-for="PostalCode" type="number" value="@Model.PostalCode" placeholder="Postal code"/>
-                    <input asp-for="City" type="text" value="@Model.City" placeholder="City"/>
+                    <input asp-for="PostingAddress" type="text" value="@Model.PostingAddress" placeholder="Posting address" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </td>
             </tr>
             <tr>
-                <td><input asp-for="Email" type="email" value="@Model.Email" placeholder="Email"/></td>
+                <td>
+                    <input asp-for="PostalCode" type="" value="@Model.PostalCode" placeholder="Postal code"/>
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    <input asp-for="City" type="text" value="@Model.City" placeholder="City"/>
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </td>
             </tr>
             <tr>
-                <td><input asp-for="PhoneNumber" type="number" value="@Model.PhoneNumber" placeholder="Phone Number"/></td>
+                <td>
+                    <input asp-for="Email" type="email" value="@Model.Email" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input asp-for="PhoneNumber" type="text" value="@Model.PhoneNumber" placeholder="Phone Number" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </td>
             </tr>
             </tbody>
         </table>

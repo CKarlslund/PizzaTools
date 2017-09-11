@@ -180,8 +180,6 @@ namespace Pizzeria.Controllers
 
         public IActionResult Payment(CheckoutInfo checkoutInfo)
         {
-            
-
             var order = _context.Order
                 .Include(o => o.Basket)
                 .FirstOrDefault(x => x.OrderId == checkoutInfo.OrderId);
@@ -227,6 +225,9 @@ namespace Pizzeria.Controllers
 
             var order = _context.Order
                 .FirstOrDefault(x => x.BasketId == basketId);
+
+            order.Paid = true;
+            await _context.SaveChangesAsync();
 
             var checkoutInfo = _context.CheckoutInfo.FirstOrDefault(x => x.OrderId == order.OrderId);
 
