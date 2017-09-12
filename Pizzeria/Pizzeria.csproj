@@ -31,4 +31,8 @@
     <Folder Include="Resources\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\simple-sidebar.css" />
+  </ItemGroup>
+
 </Project>

@@ -26,6 +26,8 @@ namespace PizzeriaUnitTests
 
             services.AddTransient<BasketService>();
             services.AddTransient<IngredientService>();
+            services.AddTransient<CategoryService>();
+            services.AddTransient<OrderService>();
 
             ServiceProvider = services.BuildServiceProvider();
             services.AddSingleton<IServiceProvider>(ServiceProvider);

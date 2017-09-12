@@ -2,18 +2,9 @@
 @model System.Collections.Generic.IEnumerable<Pizzeria.Models.Dish>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Pizza Tools";
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <div id="banner">
-            <img src="~/images/pizzabanner.jpg" class="img-responsive" />
-            <div id="banner-text">
-                Pizza & Tools
-            </div>
-        </div>
-    </div>
     <form asp-controller="Home" asp-action="ExecuteCommands" method="post" id="MainForm">
         <div class="col-md-8">
             <h2>Menu</h2>
@@ -28,8 +19,6 @@
             }
         </div>
     </form>
-
-</div>
 @*Popup section*@
 
 <div id='myModal' class='modal'>
@@ -73,8 +62,8 @@
                     }
                 });
             });
-            //$("#closebtn").on('click',function(){
-            //    $('#myModal').modal('hide');
+            $("#closebtn").on('click',function(){
+                $('#myModal').modal('hide');
 
             $("#closbtn").click(function () {
                 $('#myModal').modal('hide');

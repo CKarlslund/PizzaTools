@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Pizzeria.Data;
@@ -22,11 +23,22 @@ namespace PizzeriaUnitTests
 
         private void CreateData(ApplicationDbContext context)
         {
-            context.Ingredients.Add(new Ingredient() { Name = "CCC" });
-            context.Ingredients.Add(new Ingredient() { Name = "BBB" });
-            context.Ingredients.Add(new Ingredient() { Name = "AAA" });
+
+            var ing1 = new Ingredient() { Name = "CCC" };
+            var ing2 = new Ingredient() { Name = "BBB" };
+            var ing3 = new Ingredient() { Name = "AAA" };
+
+            context.AddRange(ing1,ing2,ing3);
 
             context.SaveChanges();
+
+            var dish = new Dish()
+            {
+                DishIngredients = new List<DishIngredient>()
+                {
+                    
+                }
+            };
         }
 
         [Fact]
@@ -49,20 +61,27 @@ namespace PizzeriaUnitTests
         public void All_returns_correct_result()
         {
             //Arrange
+            var ingredientService = ServiceProvider.GetService<IngredientService>();
 
             //Act
+            var result = ingredientService.All();
 
             //Assert
+            Assert.Equal(3, result.Count);
         }
 
         [Fact]
         public void AllForDish_returns_correct_result()
         {
-            //Arrange
+            ////Arrange
+            //ISession session = new TestSession();
+            //session.SetInt32("BasketId", 3);
 
-            //Act
+            ////Act
+            //var result = Pizzeria.Services.BasketService.GetTotal(session);
 
-            //Assert
+            ////Assert
+            //Assert.Equal(result, 140);
         }
 
     }

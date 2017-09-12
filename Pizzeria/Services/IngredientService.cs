@@ -16,13 +16,13 @@ namespace Pizzeria.Services
 
         public List<Ingredient> AllForDish(int dishId)
         {
-            var ingredients1= _context.Dishes.FirstOrDefault(x => x.DishId == dishId).DishIngredients.Select(y => y.Ingredient).ToList();
+            var dishIngredients= _context.Dishes.FirstOrDefault(x => x.DishId == dishId).DishIngredients.Select(y => y.Ingredient).ToList();
 
             var ingredientsList = _context.Ingredients.OrderBy(x => x.Name).ToList();
 
             foreach (var ingredient in ingredientsList)
             {
-                if (ingredients1.Exists(x => x.IngredientId == ingredient.IngredientId))
+                if (dishIngredients.Exists(x => x.IngredientId == ingredient.IngredientId))
                 {
                     ingredient.Enabled = true;
                 }

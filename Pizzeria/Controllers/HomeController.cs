@@ -27,15 +27,16 @@ namespace Pizzeria.Controllers
             _ingredientService = ingredientService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(List<Dish> dishes)
         {
-            var dishes = await _context.Dishes
-                .Include(b => b.Category)
-                .Include(c => c.DishIngredients)
-                .ThenInclude(e => e.Ingredient)
-                .ToListAsync();
-
-            ViewBag.HideSection = false;
+            if (dishes == null || dishes.Count == 0)
+            {
+                dishes = await _context.Dishes
+                    .Include(b => b.Category)
+                    .Include(c => c.DishIngredients)
+                    .ThenInclude(e => e.Ingredient)
+                    .ToListAsync();
+            }
 
             return View(dishes);
         }
@@ -71,14 +72,14 @@ namespace Pizzeria.Controllers
 
         public IActionResult FilterCategories(int id)
         {
-            var products = _context.Dishes
+            var dishes = _context.Dishes
                 .Where(x => x.CategoryId.Equals(id))
                 .Include(b => b.Category)
                 .Include(c => c.DishIngredients)
                 .ThenInclude(e => e.Ingredient)
                 .ToList();
 
-            return View("Index", products);
+            return View("Index", dishes);
         }
 
         public async Task<IActionResult> ExecuteCommands(IFormCollection formCollection)
@@ -112,12 +113,6 @@ namespace Pizzeria.Controllers
 
         public IActionResult CustomizePopup(int id)
         {
-            var temp = _context.BasketItems
-                .Include(x => x.BasketItemIngredients)
-                .ThenInclude(y => y.Ingredient)
-                .Include(z => z.Dish)
-                .ToList();
-
             var basketItem = _context.BasketItems.Include(y => y.BasketItemIngredients).FirstOrDefault(x => x.BasketItemId == id);
 
             return PartialView("_CustomizePopup", basketItem);

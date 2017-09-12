@@ -18,13 +18,15 @@ namespace Pizzeria.Services
         
         public Basket GetCurrentBasket(ISession contextSession)
         {
-            var temp1 = GetCurrentBasketId(contextSession);
+            var basketId = GetCurrentBasketId(contextSession);
 
-            var temp = _context.Baskets.Include(y => y.Items).FirstOrDefault(x => x.BasketId == temp1);
-            return temp;
+            return _context.Baskets
+                .Include(y => y.Items)
+                .ThenInclude(x => x.Dish)
+                .FirstOrDefault(x => x.BasketId == basketId);
         }
 
-        public int GetCurrentBasketId(ISession contextSession)
+        private int GetCurrentBasketId(ISession contextSession)
         {
             var basketId = contextSession.GetInt32("BasketId");
 

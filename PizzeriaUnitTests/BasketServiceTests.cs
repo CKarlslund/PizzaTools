@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Pizzeria.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Pizzeria.Data;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace PizzeriaUnitTests
 {
-    class BasketServiceTests : BasePizzeriaTests
+    internal class BasketServiceTests : BasePizzeriaTests
     {
         public override void InitializeDatabase()
         {
@@ -33,6 +34,7 @@ namespace PizzeriaUnitTests
 
             var basket = new Basket()
             {
+                BasketId = 3,
                 Items = new List<BasketItem>() { basketItem}
             };
 
@@ -42,35 +44,31 @@ namespace PizzeriaUnitTests
         }
 
         [Fact]
-        public void GetCurrentBasketId_returns_correct_basket()
+        public void GetCurrentBasket_returns_correct_basket()
         {
-            //Arrange
-            //var session =
-            ////Act
-            //var result = Pizzeria.Services.BasketService.GetCurrentBasketId(session);
+            ////Arrange
+            //ISession session = new TestSession();
+            //session.SetInt32("BasketId", 3);
 
-            //Assert
+            //////Act
+            //var result = Pizzeria.Services.BasketService.GetCurrentBasket(session);
+
+            ////Assert
+            //Assert.Equal(result.BasketId, 3);
         }
-
-        [Fact]
-        public void GetCurrentBasketId_returns_correct_id()
-        {
-            //Arrange
-            //var session =
-            ////Act
-            //var result = Pizzeria.Services.BasketService.GetCurrentBasketId(session);
-
-            //Assert
-        }
-
+        
         [Fact]
         public void GetTotal_returns_correct_total()
         {
-            //Arrange
+            ////Arrange
+            //ISession session = new TestSession();
+            //session.SetInt32("BasketId", 3);
 
-            //Act
+            ////Act
+            //var result = Pizzeria.Services.BasketService.GetTotal(session);
 
-            //Assert
+            ////Assert
+            //Assert.Equal(result, 140);
         }
     }
 }
