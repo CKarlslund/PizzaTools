@@ -15,52 +15,85 @@ namespace Pizzeria.Commands
     {
         public override async Task<IActionResult> Execute(object id, IFormCollection formCollection)
         {
-            //var context = this.Context;
+            var context = this.Context;
 
-            //var basket = context.Baskets
-            //    .Include(y => y.Items)
-            //    .ThenInclude(f => f.BasketItemIngredients)
-            //    .FirstOrDefault(x => x.BasketId == Convert.ToInt32(id));
+            var basketId = 0;
+
+            if (this.Controller.HttpContext.Session.GetInt32("BasketId") != null)
+            {
+                basketId = this.Controller.HttpContext.Session.GetInt32("BasketId").Value;
+            }
+
+            var basket = context.Baskets
+                .Include(x => x.Items)
+                .ThenInclude(y => y.BasketItemIngredients)
+                .Include(z => z.Items)
+                .ThenInclude(h => h.Dish)
+                .ThenInclude(j => j.DishIngredients)
+                .ThenInclude(k => k.Ingredient)
+                .FirstOrDefault(x => x.BasketId == basketId);
+
+            var order = new Order
+            {
+                Basket = basket
+            };
+
+            if (this.Controller.User.Identity.IsAuthenticated)
+            {
+                if (this.Controller.HttpContext.Session.GetInt32("LoggedInBefore") != null)
+                {
+                    order = context.Order
+                        .Include(x => x.Basket)
+                        .ThenInclude(y => y.Items)
+                        .ToList().Last();
+                }
+
+                var userId = this.Controller.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                var user = context.Users.FirstOrDefault(x => x.Id == userId);
+
+                order.User = user;
+                context.AddOrUpdate(order);
+
+                await context.SaveChangesAsync();
+
+                var chOutInfo = new CheckoutInfo
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PostingAddress = user.PostingAddress,
+                    PostalCode = user.PostalCode,
+                    City = user.City,
+                    Email = user.Email,
+                    PhoneNumber = Convert.ToInt32(user.PhoneNumber),
+                    OrderId = order.OrderId
+                };
 
 
+                context.AddOrUpdate(chOutInfo);
+                context.AddOrUpdate(order);
+                order.BasketId = basketId;
 
+                await context.SaveChangesAsync();
 
-            //if (this.Controller.User.Identity.IsAuthenticated)
-            //{
-                ////Create order
-                //var order = new Order
-                //{
-                //    Basket = basket,
-                //};
+                this.Controller.HttpContext.Session.Remove("LoggedInBefore");
 
-                //var userId = this.Controller.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                return Controller.RedirectToAction("Payment", "Orders",chOutInfo);
+            }
 
-                //var user = context.Users.FirstOrDefault(x => x.Id == userId);
+            context.AddOrUpdate(order);
+            await context.SaveChangesAsync();
 
-                //order.User = user;
-                //order.BasketId = basket.BasketId;
-                //context.AddOrUpdate(order);
-                //await context.SaveChangesAsync();
+            var checkoutInfo = new CheckoutInfo { OrderId = order.OrderId };
 
-                //var checkoutInfo = new CheckoutInfo()
-                //{
-                //    FirstName = user.FirstName,
-                //    LastName = user.LastName,
-                //    PostingAddress = user.PostingAddress,
-                //    PostalCode = user.PostalCode,
-                //    City = user.City,
-                //    Email = user.Email,
-                //    PhoneNumber = Convert.ToInt32(user.PhoneNumber),
-                //    OrderId = order.OrderId
-                //};
-                //context.AddOrUpdate(checkoutInfo);
+            order.BasketId = basketId;
+            await context.SaveChangesAsync();
 
-                //await context.SaveChangesAsync();
+            this.Controller.HttpContext.Session.SetInt32("LoggedInBefore", 1);
 
-            //    return Controller.RedirectToAction("Payment", "Orders", checkoutInfo);
-            //}
+            return this.Controller.RedirectToAction("LoginOrAnonymous", "Orders", checkoutInfo);
 
-            return Controller.RedirectToAction("LoginOrAnonymous", "Orders");
+            //return Controller.RedirectToAction("LoginOrAnonymous", "Orders");
         }
     }
 }
