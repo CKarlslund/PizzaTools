@@ -10,7 +10,7 @@ namespace PizzeriaUnitTests
 {
     public class BasePizzeriaTests
     {
-        public readonly IServiceProvider _serviceProvider;
+        public readonly IServiceProvider ServiceProvider;
 
         public BasePizzeriaTests()
         {
@@ -27,8 +27,8 @@ namespace PizzeriaUnitTests
             services.AddTransient<BasketService>();
             services.AddTransient<IngredientService>();
 
-            _serviceProvider = services.BuildServiceProvider();
-            services.AddSingleton<IServiceProvider>(_serviceProvider);
+            ServiceProvider = services.BuildServiceProvider();
+            services.AddSingleton<IServiceProvider>(ServiceProvider);
 
             InitializeDatabase();
         }

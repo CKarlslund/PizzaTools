@@ -15,14 +15,8 @@ namespace PizzeriaUnitTests
 {
     public class DishControllerTests : BasePizzeriaTests
     {
-        //[Fact]
-        //public void PassingTest()
-        //{
-        //    Assert.Equal(4, 2+2);
-        //}
-
         [Fact]
-        public async Task Test1()
+        public async Task Returns_correct_dishes()
         {
             //Arrange         
             var fakeDishes = new List<Dish>()

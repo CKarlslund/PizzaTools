@@ -15,7 +15,7 @@ namespace PizzeriaUnitTests
         public override void InitializeDatabase()
         {
             base.InitializeDatabase();
-            var context = _serviceProvider.GetService<ApplicationDbContext>();
+            var context = ServiceProvider.GetService<ApplicationDbContext>();
 
             CreateData(context);
         }
@@ -33,7 +33,7 @@ namespace PizzeriaUnitTests
         public void All_Are_Sorted()
         {
             //Arrange
-            var ingredients = _serviceProvider.GetService<IngredientService>();
+            var ingredients = ServiceProvider.GetService<IngredientService>();
 
             //Act
             var ings = ingredients.All();
@@ -43,6 +43,26 @@ namespace PizzeriaUnitTests
             Assert.Equal("AAA", ings[0].Name );
             Assert.Equal("BBB", ings[1].Name);
             Assert.Equal("CCC", ings[2].Name );
+        }
+
+        [Fact]
+        public void All_returns_correct_result()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+        }
+
+        [Fact]
+        public void AllForDish_returns_correct_result()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
         }
 
     }

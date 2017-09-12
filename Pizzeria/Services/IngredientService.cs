@@ -14,7 +14,7 @@ namespace Pizzeria.Services
             _context = context;
         }
 
-        public List<Ingredient> All(int dishId)
+        public List<Ingredient> AllForDish(int dishId)
         {
             var ingredients1= _context.Dishes.FirstOrDefault(x => x.DishId == dishId).DishIngredients.Select(y => y.Ingredient).ToList();
 

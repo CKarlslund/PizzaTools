@@ -24,7 +24,7 @@ namespace Pizzeria.Services
             return temp;
         }
 
-        private int GetCurrentBasketId(ISession contextSession)
+        public int GetCurrentBasketId(ISession contextSession)
         {
             var basketId = contextSession.GetInt32("BasketId");
 
