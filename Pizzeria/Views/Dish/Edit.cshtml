@@ -10,7 +10,7 @@
 
 @{
     var ingredients = IngredientService.All();
-    var dishIngredients = IngredientService.All(Model.DishId);
+    var dishIngredients = IngredientService.AllForDish(Model.DishId);
     var selectList = CategoryService.GetSelectList(Model.DishId);
 }
 <hr />
