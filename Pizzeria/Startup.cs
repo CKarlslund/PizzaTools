@@ -42,6 +42,11 @@ namespace Pizzeria
                     services.AddDbContext<ApplicationDbContext>(options =>
                         options.UseInMemoryDatabase("DefaultConnection"));
                     break;
+                case "Production":
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                        options.UseInMemoryDatabase("DefaultConnection"));
+                    break;
+
             }
 
             //services.AddDbContext<ApplicationDbContext>(options =>
