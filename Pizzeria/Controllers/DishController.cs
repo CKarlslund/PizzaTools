@@ -63,10 +63,12 @@ namespace Pizzeria.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish)
+        public async Task<IActionResult> Create([Bind("DishId,Name,Price,CategoryId")] Dish dish)
         {
             if (ModelState.IsValid)
             {
+                dish.ImageUrl = "https://cdn4.iconfinder.com/data/icons/oakcons-2/16/Image-512.png";
+                //TODO: Fix images
                 _context.Add(dish);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
