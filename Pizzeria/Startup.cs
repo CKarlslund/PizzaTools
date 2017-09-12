@@ -44,7 +44,7 @@ namespace Pizzeria
                     break;
                 case "Production":
                     services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseInMemoryDatabase("DefaultConnection"));
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                     break;
 
             }
@@ -135,6 +135,8 @@ namespace Pizzeria
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            context.Database.Migrate();
 
             DbInitializer.Initialize(context, userManager, roleManager);
         }
