@@ -80,6 +80,8 @@ li {
 /* PizzaBox*/
 #pizzaBox {
     width: 100%;
+    min-width: 150px;
+    max-width: 200px;
 }
 
 #pizzaBox img {

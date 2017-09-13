@@ -21,11 +21,12 @@
                 </li>
             }
         }
-
-        @Html.Partial("_LoginPartial")
         @if (User.IsInRole("Admin"))
         {
-            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
+            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin panel</a></li>
         }
+
+        @Html.Partial("_LoginPartial")
+
     </ul>
 </div>
