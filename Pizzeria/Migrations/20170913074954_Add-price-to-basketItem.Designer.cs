@@ -11,8 +11,8 @@ using System;
 namespace Pizzeria.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170912085343_Publish-to-Azure")]
-    partial class PublishtoAzure
+    [Migration("20170913074954_Add-price-to-basketItem")]
+    partial class AddpricetobasketItem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -213,6 +213,8 @@ namespace Pizzeria.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("Price");
+
                     b.Property<int>("Quantity");
 
                     b.HasKey("BasketItemId");
@@ -336,6 +338,8 @@ namespace Pizzeria.Migrations
                     b.Property<bool>("Enabled");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("Price");
 
                     b.HasKey("IngredientId");
 

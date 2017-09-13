@@ -11,8 +11,8 @@ using System;
 namespace Pizzeria.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170912123353_UpdatePriceProperty")]
-    partial class UpdatePriceProperty
+    [Migration("20170913085912_Changed-Back-Id-PK")]
+    partial class ChangedBackIdPK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -212,6 +212,8 @@ namespace Pizzeria.Migrations
                     b.Property<int>("DishId");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("Price");
 
                     b.Property<int>("Quantity");
 
