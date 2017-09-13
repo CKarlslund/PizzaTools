@@ -33,10 +33,21 @@ namespace Pizzeria.Commands
                 .ThenInclude(k => k.Ingredient)
                 .FirstOrDefault(x => x.BasketId == basketId);
 
-            var order = new Order
+            var previousOrder = context.Order
+                .Include(x => x.Basket)
+                .FirstOrDefault(x => x.BasketId == basketId);
+
+            var order = new Order();
+
+            if (previousOrder != null)
             {
-                Basket = basket
-            };
+                order = previousOrder;
+            }
+            else
+            {
+                order.Basket = basket;
+            }
+            
 
             if (this.Controller.User.Identity.IsAuthenticated)
             {
