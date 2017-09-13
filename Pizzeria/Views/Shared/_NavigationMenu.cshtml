@@ -3,28 +3,15 @@
 @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnv
 
 <!-- Sidebar -->
-<div id="sidebar-wrapper">
-    @await Html.PartialAsync("_LoginPartial")
+<div id="sidebar-wrapper">    
     <ul class="sidebar-nav">
         <li class="sidebar-brand">
             <a href="#">
                 @HostingEnv.EnvironmentName
             </a>
         </li>
-        @if (User.IsInRole("Admin"))
-        {
-            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
-        }
-        <li>
-            <a href="#">Overview</a>
-        </li>
-        <li>
-            <a href="#">Events</a>
-        </li>
         <li class="sidebar-brand">
-            <a href="#">
-                Categories
-            </a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">All Categories</a>
         </li>
         @{
             foreach (var category in CategoryService.All())
@@ -33,6 +20,12 @@
                     <a asp-controller="Home" asp-action="FilterCategories" asp-route-id=@category.CategoryId>@category.Name</a>
                 </li>
             }
+        }
+
+        @Html.Partial("_LoginPartial")
+        @if (User.IsInRole("Admin"))
+        {
+            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
         }
     </ul>
 </div>
