@@ -113,7 +113,13 @@ namespace Pizzeria.Controllers
 
         public IActionResult CustomizePopup(int id)
         {
-            var basketItem = _context.BasketItems.Include(y => y.BasketItemIngredients).FirstOrDefault(x => x.BasketItemId == id);
+
+            var basketItem = _context.BasketItems
+                .Include(y => y.BasketItemIngredients)
+                .Include(h => h.Dish)
+                .ThenInclude(j => j.DishIngredients)
+                //.ThenInclude(k => k.Ingredient)
+                .FirstOrDefault(x => x.BasketItemId == id);
 
             return PartialView("_CustomizePopup", basketItem);
         }

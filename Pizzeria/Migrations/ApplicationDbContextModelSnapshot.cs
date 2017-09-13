@@ -212,6 +212,8 @@ namespace Pizzeria.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("Price");
+
                     b.Property<int>("Quantity");
 
                     b.HasKey("BasketItemId");

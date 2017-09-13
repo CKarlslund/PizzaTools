@@ -26,7 +26,7 @@
         @{
             foreach (var basketItem in order.Basket.Items)
             {
-                var price = basketItem.Dish.Price * basketItem.Quantity;
+                var price = basketItem.Price * basketItem.Quantity;
             
                 <tr>
                         @{

@@ -52,7 +52,7 @@ namespace Pizzeria.Services
             if (currentBasket?.Items != null)
                 foreach (var currentBasketItem in currentBasket.Items)
                 {
-                    total += currentBasketItem.Quantity * currentBasketItem.Dish.Price;
+                    total += currentBasketItem.Quantity * currentBasketItem.Price;
                 }
 
             return total;

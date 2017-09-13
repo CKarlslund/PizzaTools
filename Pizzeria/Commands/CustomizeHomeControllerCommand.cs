@@ -28,7 +28,6 @@ namespace Pizzeria.Commands
 
             var basket = context.Baskets.FirstOrDefault(x => x.BasketId == oldBasketItem.Basket.BasketId);
 
-
             //Get old basket item ingredients
             var oldBasketItemIngredients = context.BasketItems
                 .Include(y => y.BasketItemIngredients)
@@ -52,7 +51,11 @@ namespace Pizzeria.Commands
                 }).ToList();
 
             //Compare old and new
-            var isEqual = newBasketItemIngredients.Select(x => x.IngredientId).SequenceEqual(oldBasketItemIngredients.Select(y => y.IngredientId));
+            var newBasketItemIngredientInts = newBasketItemIngredients.Select(x => x.IngredientId).ToList();
+            var oldBasketItemIngredientInts = oldBasketItemIngredients.Select(y => y.IngredientId).ToList();
+            
+            var isEqual = newBasketItemIngredientInts.SequenceEqual(oldBasketItemIngredientInts);
+           
 
             if (!isEqual)
             {
@@ -62,18 +65,38 @@ namespace Pizzeria.Commands
                     Dish = oldBasketItem.Dish,
                     Basket = basket,
                     Quantity = oldBasketItem.Quantity,
+                    Price = oldBasketItem.Price,
                     BasketItemIngredients = newBasketItemIngredients,
                 };
 
-                context.AddOrUpdate(newBasketItem);
-                context.SaveChanges();
+                var newIngredients = newBasketItemIngredientInts.Except(oldBasketItemIngredientInts).ToList();
+
+                if (newIngredients.Count != 0)
+                {
+                    newBasketItem.Price = oldBasketItem.Dish.Price;
+
+                    foreach (var newIngredient in newIngredients)
+                    {
+                        var ing = context.Ingredients.FirstOrDefault(x => x.IngredientId == newIngredient);
+
+                        newBasketItem.Price += ing.Price;
+                    }
+                }
 
                 context.BasketItems.Remove(oldBasketItem);
+                context.SaveChanges();
+
                 basket.Items.Remove(oldBasketItem);
+                context.SaveChanges();
+
                 basket.Items.Add(newBasketItem);
+                context.SaveChanges();
+
                 context.Update(oldBasketItem.Basket);
                 context.SaveChanges();
-                
+
+                context.AddOrUpdate(newBasketItem);
+                context.SaveChanges();
             }
 
 

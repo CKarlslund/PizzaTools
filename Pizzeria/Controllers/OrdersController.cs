@@ -188,13 +188,12 @@ namespace Pizzeria.Controllers
                 .ThenInclude(c => c.Dish)
                 .FirstOrDefault(x => x.BasketId == order.Basket.BasketId);
 
-            //Calculate total
+            //Add shipping to total
             var total = 0;
 
-            foreach (var basketItem in basket.Items)
-            {
-                total += (basketItem.Quantity * basketItem.Dish.Price);
-            }
+            var service = new BasketService(_context);
+
+            total = service.GetTotal(HttpContext.Session);
 
             var shipping = 0;
 
@@ -245,6 +244,10 @@ namespace Pizzeria.Controllers
 
         public IActionResult LoginOrAnonymous(CheckoutInfo checkoutInfo)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return View("Payment", checkoutInfo);
+            }
 
             ViewData["ReturnUrl"] = HttpContext.Request.GetUri().AbsolutePath;
 
