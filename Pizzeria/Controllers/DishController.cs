@@ -67,7 +67,9 @@ namespace Pizzeria.Controllers
         {
             if (ModelState.IsValid)
             {
-                dish.ImageUrl = dish.Category.DefaultImage;
+                var category = _context.Categories.FirstOrDefault(x => x.CategoryId == dish.CategoryId);
+
+                dish.ImageUrl = category.DefaultImage;
 
                 var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
 
@@ -81,6 +83,8 @@ namespace Pizzeria.Controllers
 
                     dish.DishIngredients.Add(new DishIngredient() { IngredientId = ingredientId, Enabled = true, DishId = dish.DishId });
                 }
+
+                _context.Dishes.Add(dish);
 
                 await _context.SaveChangesAsync();
 
