@@ -63,14 +63,27 @@ namespace Pizzeria.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price,CategoryId")] Dish dish)
+        public async Task<IActionResult> Create([Bind("DishId,Name,Price,CategoryId,")] Dish dish, IFormCollection formCollection)
         {
             if (ModelState.IsValid)
             {
-                dish.ImageUrl = "https://cdn4.iconfinder.com/data/icons/oakcons-2/16/Image-512.png";
-                //TODO: Fix images
-                _context.Add(dish);
+                dish.ImageUrl = dish.Category.DefaultImage;
+
+                var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
+
+                dish.DishIngredients = new List<DishIngredient>();
+
+                foreach (var ingredientKey in ingredientKeys)
+                {
+                    var splitKey = ingredientKey.Split("-");
+
+                    var ingredientId = Convert.ToInt32(splitKey[1]);
+
+                    dish.DishIngredients.Add(new DishIngredient() { IngredientId = ingredientId, Enabled = true, DishId = dish.DishId });
+                }
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(dish);
@@ -98,7 +111,7 @@ namespace Pizzeria.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish, IFormCollection formCollection)
+        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection formCollection)
         {
             if (id != dish.DishId)
             {
@@ -109,12 +122,20 @@ namespace Pizzeria.Controllers
             {
                 try
                 {
-                    var dishIngredients = _context.DishIngredients.Where(x => x.DishId == dish.DishId);
-                    _context.DishIngredients.RemoveRange(dishIngredients);
+                    var dishIngredients = _context.DishIngredients.Where(x => x.DishId == dish.DishId).ToList();
+
+                    if (dishIngredients.Count() != 0)
+                    {
+                        _context.DishIngredients.RemoveRange(dishIngredients);
+                        await _context.SaveChangesAsync();
+                    }
+                                      
+                    dish.ImageUrl = dish.ImageUrl;
                     _context.Update(dish);
-                    await _context.SaveChangesAsync();
 
                     var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
+
+                    dish.DishIngredients = new List<DishIngredient>();
 
                     foreach (var ingredientKey in ingredientKeys)
                     {
@@ -122,9 +143,9 @@ namespace Pizzeria.Controllers
 
                         var ingredientId = Convert.ToInt32(splitKey[1]);
 
-                        dish.DishIngredients.Add(new DishIngredient(){IngredientId = ingredientId, Enabled = true, DishId = dish.DishId});
-                    }
-                    
+                        dish.DishIngredients.Add(new DishIngredient() { IngredientId = ingredientId, Enabled = true, DishId = dish.DishId });
+                        }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
