@@ -45,10 +45,10 @@ namespace PizzeriaUnitTests
         public void All_Are_Sorted()
         {
             //Arrange
-            var ingredients = ServiceProvider.GetService<IngredientService>();
+            var ingredientService = ServiceProvider.GetService<IngredientService>();
 
             //Act
-            var ings = ingredients.All();
+            var ings = ingredientService.All();
 
             //Assert
             Assert.Equal(3, ings.Count);
