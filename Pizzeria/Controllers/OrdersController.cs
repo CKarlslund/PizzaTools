@@ -56,6 +56,9 @@ namespace Pizzeria.Controllers
 
             var order = await _context.Order
                 .Include(o => o.Basket)
+                .ThenInclude(p => p.Items)
+                .ThenInclude(q => q.BasketItemIngredients)
+                .ThenInclude(r => r.Ingredient)
                 .SingleOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
@@ -97,7 +100,12 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
+            var order = await _context.Order
+                .Include(o => o.Basket)
+                .ThenInclude(p => p.Items)
+                .ThenInclude(q => q.BasketItemIngredients)
+                .ThenInclude(r => r.Ingredient)
+                .SingleOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
                 return NotFound();

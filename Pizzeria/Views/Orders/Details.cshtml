@@ -1,4 +1,9 @@
 ﻿@model Pizzeria.Models.Order
+@inject Pizzeria.Services.IngredientService IngredientService
+
+    @{
+        var ingredients = IngredientService.All();
+    }
 
 
 <!DOCTYPE html>
@@ -45,6 +50,18 @@
             @Html.DisplayFor(model => model.Basket.BasketId)
         </dd>
     </dl>
+    @{
+        foreach (var basketItem in @Model.Basket.Items)
+        {
+                
+            <div><h4>@basketItem.Name</h4></div>
+                foreach (var basketItemIngredient in basketItem.BasketItemIngredients)
+                 {
+                     <div>@basketItemIngredient.Ingredient.Name</div>
+                 }
+             
+        }
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.OrderId">Edit</a> |
