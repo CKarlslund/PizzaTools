@@ -6,34 +6,20 @@
 }
 
 <h2>Administration panel</h2>
-<table>
-    <tbody>
-        <tr>
-            <td>
-                <a asp-area="" asp-controller="Dish" asp-action="Index">Dishes</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
-            </td>
-        </tr>
-        <tr>
-                <td>
-                    <a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a>
-                </td>
-            </tr>
-        <tr>
-            <td>
-                <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-            </td>
-    <tr/>
-    <tr>
-        <td>
-            <a asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
-        </td>
-    </tr>
-    </tbody>
 
-</table>
+<div class="well" style="width: 150px">
+    <a asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+</div>
+<div class="well"  style="width: 150px">
+    <a asp-area="" asp-controller="Dish" asp-action="Index">Dishes</a>
+</div>
+<div class="well"  style="width: 150px">
+    <a asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+</div>
+<div class="well"  style="width: 150px">
+    <a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a>
+</div>
+<div class="well"  style="width: 150px">
+    <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+</div>
 

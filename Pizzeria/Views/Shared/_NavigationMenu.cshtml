@@ -5,13 +5,17 @@
 <!-- Sidebar -->
 <div id="sidebar-wrapper">    
     <ul class="sidebar-nav">
-        <li class="sidebar-brand">
+        <li>
             <a href="#">
                 @HostingEnv.EnvironmentName
             </a>
         </li>
+        @if (User.IsInRole("Admin"))
+        {
+            <li><a asp-area="" asp-controller="Admin" asp-action="Index"><h4>Admin panel</h4></a></li>
+        }
         <li class="sidebar-brand">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">All Categories</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index">All Categories</a>
         </li>
         @{
             foreach (var category in CategoryService.All())
@@ -20,10 +24,6 @@
                     <a asp-controller="Home" asp-action="FilterCategories" asp-route-id=@category.CategoryId>@category.Name</a>
                 </li>
             }
-        }
-        @if (User.IsInRole("Admin"))
-        {
-            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin panel</a></li>
         }
 
         @Html.Partial("_LoginPartial")

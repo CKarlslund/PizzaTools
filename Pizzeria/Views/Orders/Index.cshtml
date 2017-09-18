@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<Pizzeria.Models.Order>
 
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 
@@ -31,7 +28,7 @@
             @Html.DisplayNameFor(model => model.Finished)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Basket)
+            @Html.DisplayNameFor(model => model.Basket) items
         </th>
         <th></th>
     </tr>
