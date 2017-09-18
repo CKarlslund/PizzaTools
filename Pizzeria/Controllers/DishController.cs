@@ -115,7 +115,7 @@ namespace Pizzeria.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection formCollection)
+        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId,ImageUrl")] Dish dish, IFormCollection formCollection)
         {
             if (id != dish.DishId)
             {
@@ -133,8 +133,6 @@ namespace Pizzeria.Controllers
                         _context.DishIngredients.RemoveRange(dishIngredients);
                         await _context.SaveChangesAsync();
                     }
-                                      
-                    dish.ImageUrl = dish.ImageUrl;
                     _context.Update(dish);
 
                     var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
