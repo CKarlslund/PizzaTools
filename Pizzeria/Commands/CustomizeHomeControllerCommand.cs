@@ -52,11 +52,15 @@ namespace Pizzeria.Commands
 
             //Compare old and new
             var newBasketItemIngredientInts = newBasketItemIngredients.Select(x => x.IngredientId).ToList();
-            var oldBasketItemIngredientInts = oldBasketItemIngredients.Select(y => y.IngredientId).ToList();
-            
+            var dishId = context.BasketItems.FirstOrDefault(x => x.BasketItemId == basketItemId).Dish.DishId;
+
+            var oldBasketItemIngredientInts = context.DishIngredients
+                .Include(x => x.Ingredient)
+                .Where(h => h.DishId == dishId)
+                .Select(j => j.IngredientId);
+
             var isEqual = newBasketItemIngredientInts.SequenceEqual(oldBasketItemIngredientInts);
            
-
             if (!isEqual)
             {
                 var newBasketItem = new BasketItem()

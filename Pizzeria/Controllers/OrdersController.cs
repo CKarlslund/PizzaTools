@@ -102,7 +102,7 @@ namespace Pizzeria.Controllers
             {
                 return NotFound();
             }
-            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.Basket.BasketId);
+            ViewData["BasketId"] = new SelectList(_context.Baskets, "BasketId", "BasketId", order.BasketId);
             return View(order);
         }
 
