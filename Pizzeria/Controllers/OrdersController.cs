@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,6 +19,7 @@ using Pizzeria.Services;
 
 namespace Pizzeria.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -191,11 +193,6 @@ namespace Pizzeria.Controllers
                 .Include(o => o.Basket)
                 .FirstOrDefault(x => x.OrderId == checkoutInfo.OrderId);
 
-            var basket = _context.Baskets
-                .Include(b => b.Items)
-                .ThenInclude(c => c.Dish)
-                .FirstOrDefault(x => x.BasketId == order.Basket.BasketId);
-
             //Add shipping to total
             var total = 0;
 
@@ -254,7 +251,38 @@ namespace Pizzeria.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return View("Payment", checkoutInfo);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                var user = _context.Users.FirstOrDefault(x => x.Id == userId);
+
+                var order = _context.Order
+                    .Include(x => x.Basket)
+                    .ThenInclude(y => y.Items)
+                    .ToList().Last();
+
+                order.User = user;
+                _context.AddOrUpdate(order);
+
+                _context.SaveChanges();
+
+                var chOutInfo = new CheckoutInfo
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PostingAddress = user.PostingAddress,
+                    PostalCode = user.PostalCode,
+                    City = user.City,
+                    Email = user.Email,
+                    PhoneNumber = Convert.ToInt32(user.PhoneNumber),
+                    OrderId = order.OrderId
+                };
+
+                _context.AddOrUpdate(chOutInfo);
+                _context.AddOrUpdate(order);
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Payment", "Orders", chOutInfo);
             }
 
             ViewData["ReturnUrl"] = HttpContext.Request.GetUri().AbsolutePath;
