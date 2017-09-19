@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pizzeria.Models
+namespace Pizzeria.Models.DishViewModels
 {
     public class CreateDishViewModel
     {

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
 using Pizzeria.Models;
+using Pizzeria.Models.DishViewModels;
 using Pizzeria.Services;
 
 namespace Pizzeria.Controllers
