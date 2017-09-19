@@ -11,6 +11,6 @@ namespace Pizzeria.Models
 
         public List<DishIngredient> DishIngredients { get; set; }
         public List<BasketItemIngredient> BasketItemIngredients { get; set; }
-        public bool Enabled { get; set; }
+        //public bool Enabled { get; set; }
     }
 }
