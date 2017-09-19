@@ -1,4 +1,4 @@
-﻿@model Pizzeria.Models.Dish
+﻿@model Pizzeria.Models.EditDishViewModel
 @inject Pizzeria.Services.IngredientService IngredientService
 @inject Pizzeria.Services.CategoryService CategoryService
 
@@ -10,53 +10,56 @@
 
 @{
     var ingredients = IngredientService.All();
-    var dishIngredients = IngredientService.AllForDish(Model.DishId);
-    var selectList = CategoryService.GetSelectList(Model.DishId);
+    var dishIngredients = IngredientService.AllForDish(Model.Dish.DishId);
+    var selectList = CategoryService.GetSelectList(Model.Dish.DishId);
 }
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DishId" />
+            <input type="hidden" asp-for="Dish.DishId" />
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
+                <label asp-for="Dish.Category" class="control-label"></label>
                 @{
-                    <select asp-for="CategoryId" asp-items="@selectList"></select>
+                    <select asp-for="Dish.CategoryId" asp-items="@selectList"></select>
                 }
-                <span asp-validation-for="Category" class="text-danger"></span>
+                <span asp-validation-for="Dish.Category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Dish.Name" class="control-label"></label>
+                <input asp-for="Dish.Name" class="form-control" />
+                <span asp-validation-for="Dish.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <label asp-for="Dish.Price" class="control-label"></label>
+                <input asp-for="Dish.Price" class="form-control" />
+                <span asp-validation-for="Dish.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" style="width: 400px;"/>
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <label asp-for="Dish.ImageUrl" class="control-label"></label>
+                <input asp-for="Dish.ImageUrl" class="form-control" style="width: 400px;"/>
+                <span asp-validation-for="Dish.ImageUrl" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DishIngredients" class="control-label"></label>
-                @{
-                    for(var i = 0; i < ingredients.Count; i++)
-                    {
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" asp-for="@dishIngredients[i].Enabled"
-                                       name="ingredient-@dishIngredients[i].IngredientId" /> @dishIngredients[i].Name
-                            </label>
-                        </div>
-                    }
-                }
-                <span asp-validation-for="DishIngredients" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            
+
+                    <div class="form-group">
+                        
+                        @{
+
+                            for (var i = 0; i < Model.Ingredients.Count(); i++)
+                            {
+                                <input type="checkbox" asp-for="@Model.Ingredients[i].Selected"/>
+                                <label asp-for="@Model.Ingredients[i].Selected"> @Model.Ingredients[i].Name</label>
+                                <input type="hidden" asp-for="@Model.Ingredients[i].Id"/>
+                                <input type="hidden" asp-for="@Model.Ingredients[i].Name"/>
+                                <br/>
+                            }
+                        }
+                    </div>
+                
+            
+                <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>

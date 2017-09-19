@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
 using Pizzeria.Models;
+using Pizzeria.Services;
 
 namespace Pizzeria.Controllers
 {
@@ -17,11 +18,15 @@ namespace Pizzeria.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<DishController> _logger;
+        private IngredientService _ingredientService;
+        private DishService _dishService;
 
-        public DishController(ApplicationDbContext context, ILogger<DishController> logger)
+        public DishController(ApplicationDbContext context, ILogger<DishController> logger, IngredientService ingredientService, DishService dishService)
         {
             _context = context;
             _logger = logger;
+            _ingredientService = ingredientService;
+            _dishService = dishService;
         }
 
         // GET: Dishes
@@ -100,18 +105,26 @@ namespace Pizzeria.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var dish = await _context.Dishes.Include(x => x.DishIngredients).ThenInclude(y => y.Ingredient).SingleOrDefaultAsync(m => m.DishId == id);
             if (dish == null)
             {
                 return NotFound();
             }
 
-            return View(dish);
+            EditDishViewModel model = new EditDishViewModel();
+            model.Dish = dish;
+            model.Ingredients = new List<CheckBox>();
+                foreach (var ingredient in _ingredientService.All())
+                {
+                    model.Ingredients.Add(new CheckBox
+                    {
+                        Id = ingredient.IngredientId,
+                        Name = ingredient.Name,
+                        Selected = _dishService.HasIngredient(dish.DishId, ingredient.IngredientId)
+                    });
+                }
+                
+            return View(model);
         }
 
         // POST: Dishes/Edit/5
@@ -120,9 +133,9 @@ namespace Pizzeria.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId,ImageUrl")] Dish dish, IFormCollection formCollection)
+        public async Task<IActionResult> Edit(int id, EditDishViewModel model)
         {
-            if (id != dish.DishId)
+            if (id != model.Dish.DishId)
             {
                 return NotFound();
             }
@@ -131,34 +144,26 @@ namespace Pizzeria.Controllers
             {
                 try
                 {
-                    var dishIngredients = _context.DishIngredients.Where(x => x.DishId == dish.DishId).ToList();
+                    await _context.DishIngredients.ForEachAsync(di => _context.Remove(di));
+                    await _context.SaveChangesAsync();
 
-                    if (dishIngredients.Count() != 0)
+                    foreach (var ingredient in model.Ingredients.Where(i => i.Selected))
                     {
-                        _context.DishIngredients.RemoveRange(dishIngredients);
+                        _context.DishIngredients.Add(new DishIngredient
+                        {
+                            DishId = id,
+                            IngredientId = ingredient.Id
+                         });
+
+                        _context.Update(model.Dish);
                         await _context.SaveChangesAsync();
                     }
-                    _context.Update(dish);
-
-                    var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
-
-                    dish.DishIngredients = new List<DishIngredient>();
-
-                    foreach (var ingredientKey in ingredientKeys)
-                    {
-                        var splitKey = ingredientKey.Split("-");
-
-                        var ingredientId = Convert.ToInt32(splitKey[1]);
-
-                        dish.DishIngredients.Add(new DishIngredient() { IngredientId = ingredientId, Enabled = true, DishId = dish.DishId });
-                        }
-
-                    await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException exc)
                 {
-                    if (!DishExists(dish.DishId))
+                    if (!DishExists(model.Dish.DishId))
                     {
+                        _logger.LogError(exc.ToString());
                         return NotFound();
                     }
                     else
@@ -168,7 +173,7 @@ namespace Pizzeria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(dish);
+            return View(model);
         }
 
         // GET: Dishes/Delete/5
