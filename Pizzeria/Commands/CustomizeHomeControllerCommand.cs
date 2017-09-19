@@ -44,7 +44,7 @@ namespace Pizzeria.Commands
                 }).ToList();
 
             //Compare old and new
-            var newBasketItemIngredientInts = newBasketItemIngredients.Select(x => x.IngredientId).ToList();
+            var newBasketItemIngredientIds = newBasketItemIngredients.Select(x => x.IngredientId).ToList();
 
             var dishId = context.BasketItems.FirstOrDefault(x => x.BasketItemId == basketItemId).Dish.DishId;
 
@@ -53,7 +53,7 @@ namespace Pizzeria.Commands
                 .Where(h => h.DishId == dishId)
                 .Select(j => j.IngredientId);
 
-            var isEqual = newBasketItemIngredientInts.SequenceEqual(oldBasketItemIngredientInts);
+            var isEqual = newBasketItemIngredientIds.SequenceEqual(oldBasketItemIngredientInts);
            
             if (!isEqual)
             {
@@ -63,23 +63,8 @@ namespace Pizzeria.Commands
                     Dish = oldBasketItem.Dish,
                     Basket = basket,
                     Quantity = oldBasketItem.Quantity,
-                    Price = oldBasketItem.Price,
                     BasketItemIngredients = newBasketItemIngredients,
                 };
-
-                var newIngredients = newBasketItemIngredientInts.Except(oldBasketItemIngredientInts).ToList();
-
-                if (newIngredients.Count != 0)
-                {
-                    newBasketItem.Price = oldBasketItem.Dish.Price;
-
-                    foreach (var newIngredient in newIngredients)
-                    {
-                        var ing = context.Ingredients.FirstOrDefault(x => x.IngredientId == newIngredient);
-
-                        newBasketItem.Price += ing.Price;
-                    }
-                }
 
                 context.BasketItems.Remove(oldBasketItem);
                 context.SaveChanges();

@@ -3,6 +3,7 @@ using Pizzeria.Data;
 using Pizzeria.Models;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace Pizzeria.Services
@@ -52,14 +53,35 @@ namespace Pizzeria.Services
             if (currentBasket?.Items != null)
                 foreach (var currentBasketItem in currentBasket.Items)
                 {
-                    total += currentBasketItem.Quantity * currentBasketItem.Price;
+                    var basketService = new BasketService(_context);
+                    total += currentBasketItem.Quantity * basketService.GetPriceForBasketItem(currentBasketItem.BasketItemId);
                 }
 
             return total;
         }
-    }
 
-       
+        public int GetPriceForBasketItem(int basketItemId)
+        {
+            var newItem = _context.BasketItems
+                .Include(x => x.BasketItemIngredients)
+                .ThenInclude(y => y.Ingredient)
+                .FirstOrDefault(z => z.BasketItemId == basketItemId);
+
+            var extraItemIngredientsIds = GetExtraItemIngredientIds(basketItemId, newItem.DishId);
+           
+            return newItem.Dish.Price + newItem.BasketItemIngredients.Where(bii => extraItemIngredientsIds.Any(id => id == bii.IngredientId)).Sum(bii => bii.Ingredient.Price);
+        }
+
+        public List<int> GetExtraItemIngredientIds(int basketItemId, int newItemDishId)
+        {
+            var originalIngredientIds = _context.DishIngredients.Where(di => di.DishId == newItemDishId)
+                .Select(di => di.IngredientId).ToList();
+            var basketItemIngredientIds = _context.BasketItemIngredients.Where(bii => bii.BasketItemId == basketItemId)
+                .Select(bii => bii.IngredientId).ToList();
+
+            return basketItemIngredientIds.Except(originalIngredientIds).ToList();
+        }
+    }       
 }
 
 

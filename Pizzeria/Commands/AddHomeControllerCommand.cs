@@ -35,7 +35,6 @@ namespace Pizzeria.Commands
                         {
                             Dish = dish,
                             Quantity = 1,
-                            Price = dish.Price
                         }
                     }
                 };
@@ -81,7 +80,6 @@ namespace Pizzeria.Commands
                     {
                         Dish = dish,
                         Quantity = 1,
-                        Price = dish.Price,
                         BasketItemIngredients = basketItemIngredients                        
                     });                    
                 }

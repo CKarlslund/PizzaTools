@@ -1,5 +1,6 @@
 ﻿@model CheckoutInfo
 @inject Pizzeria.Services.OrderService OrderService
+@inject Pizzeria.Services.BasketService BasketService
 
 @{
     var order = OrderService.GetOrder(Model.OrderId);
@@ -26,7 +27,7 @@
         @{
             foreach (var basketItem in order.Basket.Items)
             {
-                var price = basketItem.Price * basketItem.Quantity;
+                var price = BasketService.GetPriceForBasketItem(basketItem.BasketItemId) * basketItem.Quantity;
             
                 <tr>
                         @{
