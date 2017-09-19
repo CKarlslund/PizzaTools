@@ -19,7 +19,7 @@ using Pizzeria.Services;
 
 namespace Pizzeria.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
