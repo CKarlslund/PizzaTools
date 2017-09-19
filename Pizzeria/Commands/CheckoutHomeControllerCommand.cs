@@ -13,7 +13,7 @@ namespace Pizzeria.Commands
 {
     public class CheckoutHomeControllerCommand : BaseHomeControllerCommand
     {
-        public override async Task<IActionResult> Execute(object id, IFormCollection formCollection)
+        public override async Task<IActionResult> Execute(object id, IFormCollection formCollection = null)
         {
             var context = this.Context;
 
@@ -103,8 +103,6 @@ namespace Pizzeria.Commands
             this.Controller.HttpContext.Session.SetInt32("LoggedInBefore", 1);
 
             return this.Controller.RedirectToAction("LoginOrAnonymous", "Orders", checkoutInfo);
-
-            //return Controller.RedirectToAction("LoginOrAnonymous", "Orders");
         }
     }
 }
