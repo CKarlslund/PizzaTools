@@ -28,14 +28,7 @@ namespace Pizzeria.Commands
 
             var basket = context.Baskets.FirstOrDefault(x => x.BasketId == oldBasketItem.Basket.BasketId);
 
-            //Get old basket item ingredients
-            var oldBasketItemIngredients = context.BasketItems
-                .Include(y => y.BasketItemIngredients)
-                .Include(y => y.Basket)
-                .FirstOrDefault(x => x.BasketItemId == basketItemId)
-                .BasketItemIngredients;
-
-            //Get new basket item ingredients
+           //Get new basket item ingredients
             var homeController = ((HomeController)this.Controller);
 
             var ingredientIds = homeController._ingredientService.All().Select(x => x.IngredientId);
@@ -52,6 +45,7 @@ namespace Pizzeria.Commands
 
             //Compare old and new
             var newBasketItemIngredientInts = newBasketItemIngredients.Select(x => x.IngredientId).ToList();
+
             var dishId = context.BasketItems.FirstOrDefault(x => x.BasketItemId == basketItemId).Dish.DishId;
 
             var oldBasketItemIngredientInts = context.DishIngredients

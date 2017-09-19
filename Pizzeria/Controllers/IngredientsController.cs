@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
@@ -13,10 +14,12 @@ namespace Pizzeria.Controllers
     public class IngredientsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<IngredientsController> _logger;
 
-        public IngredientsController(ApplicationDbContext context)
+        public IngredientsController(ApplicationDbContext context, ILogger<IngredientsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Ingredients

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pizzeria", "Pizzeria\Pizzer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaUnitTests", "PizzeriaUnitTests\PizzeriaUnitTests.csproj", "{BCA0792D-3381-4417-ADC3-681AF6F8E80D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,12 @@ Global
 		{BCA0792D-3381-4417-ADC3-681AF6F8E80D}.LocalIIS|Any CPU.Build.0 = LocalIIS|Any CPU
 		{BCA0792D-3381-4417-ADC3-681AF6F8E80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCA0792D-3381-4417-ADC3-681AF6F8E80D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}.LocalIIS|Any CPU.ActiveCfg = Debug|Any CPU
+		{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}.LocalIIS|Any CPU.Build.0 = Debug|Any CPU
+		{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8010EF32-81E2-4EEC-BC10-CF980EE7AF56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

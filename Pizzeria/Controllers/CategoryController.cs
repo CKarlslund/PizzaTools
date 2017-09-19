@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
@@ -13,10 +14,12 @@ namespace Pizzeria.Controllers
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ApplicationDbContext context, ILogger<CategoryController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Category
