@@ -85,16 +85,7 @@ namespace PizzeriaUnitTests
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.ViewName);
-
             Assert.NotNull(viewResult.ViewData);
-            var viewModel = Assert.IsType<Order>(viewResult.ViewData.Model);
-            Assert.NotNull(viewModel.Basket);
-            var basket = _context.Baskets.SingleOrDefault(g => g.BasketId == viewModel.BasketId);
-            Assert.NotNull(basket);
-
-            //Assert.NotNull(viewModel.User);
-            //var user = _context.Users.SingleOrDefault(g => g.Id == viewModel.User.Id);
-            //Assert.NotNull(user);
         }
     }
 }

@@ -55,11 +55,11 @@ namespace PizzeriaUnitTests
         {
             //Arrange         
             var mockLogger = new Mock<ILogger<DishController>>();
-            var mockIngredientService = new Mock<IngredientService>();
-            var mockDishService = new Mock<DishService>();
+            var mockIngredientService = new IngredientService(_context);
+            var mockDishService = new DishService(_context);
 
 
-            var controller= new DishController(_context, mockLogger.Object, mockIngredientService.Object, mockDishService.Object);
+            var controller= new DishController(_context, mockLogger.Object, mockIngredientService, mockDishService);
 
             //Act
             var result = await controller.Index();
@@ -78,10 +78,10 @@ namespace PizzeriaUnitTests
             var dishId = 1;
 
             var mockLogger = new Mock<ILogger<DishController>>();
-            var mockIngredientService = new Mock<IngredientService>();
-            var mockDishService = new Mock<DishService>();
+            var mockIngredientService = new IngredientService(_context);
+            var mockDishService = new DishService(_context);
 
-            var controller = new DishController(_context, mockLogger.Object, mockIngredientService.Object, mockDishService.Object);
+            var controller = new DishController(_context, mockLogger.Object, mockIngredientService, mockDishService);
 
             // Act
             var result = await controller.Details(dishId);

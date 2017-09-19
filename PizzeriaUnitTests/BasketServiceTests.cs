@@ -24,21 +24,41 @@ namespace PizzeriaUnitTests
 
         private void CreateData(ApplicationDbContext context)
         {
-            var dishIngredients = new List<DishIngredient>();
 
+            var ing1 = new Ingredient() {IngredientId = 1, Name = "Cheese", Price = 5};
+            var ing2 = new Ingredient() {IngredientId = 2, Name = "Ham", Price = 10};
+        
+            context.Ingredients.AddRange(ing1,ing2);
+
+            var dishIngredients = new List<DishIngredient>()
+            {
+                new DishIngredient(){Ingredient = ing1},
+            };
+
+            context.DishIngredients.AddRange(dishIngredients);
 
             var dish = new Dish()
             {
+                Name = "Hans",
+                Price = 50,
                 DishId = 33,
                 DishIngredients = dishIngredients
             };
             context.Dishes.Add(dish);
+
+            var basketItemIngredients = new List<BasketItemIngredient>()
+            {
+                new BasketItemIngredient() {Ingredient = ing1},
+                new BasketItemIngredient() {Ingredient = ing2}
+            };
+            context.BasketItemIngredients.AddRange(basketItemIngredients);
 
             var basketItem = new BasketItem()
             {
                 BasketItemId = 45,
                 Dish = dish,
                 Quantity = 2,
+                BasketItemIngredients = basketItemIngredients
             };
             context.BasketItems.Add(basketItem);
 
@@ -83,7 +103,7 @@ namespace PizzeriaUnitTests
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(140, result);
+            Assert.Equal(120, result);
         }
 
         [Fact]
@@ -98,7 +118,7 @@ namespace PizzeriaUnitTests
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(140, result);
+            Assert.Equal(60, result);
         }
     }
 }
