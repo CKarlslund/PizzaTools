@@ -72,7 +72,7 @@ namespace Pizzeria.Services
             return newItem.Dish.Price + newItem.BasketItemIngredients.Where(bii => extraItemIngredientsIds.Any(id => id == bii.IngredientId)).Sum(bii => bii.Ingredient.Price);
         }
 
-        public List<int> GetExtraItemIngredientIds(int basketItemId, int newItemDishId)
+        private List<int> GetExtraItemIngredientIds(int basketItemId, int newItemDishId)
         {
             var originalIngredientIds = _context.DishIngredients.Where(di => di.DishId == newItemDishId)
                 .Select(di => di.IngredientId).ToList();
