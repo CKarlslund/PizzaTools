@@ -3,12 +3,24 @@ using Xunit;
 
 namespace UnitTests
 {
-    public class UnitTest1
+    public class BasketItemCalculationTests
     {
         [Fact]
-        public void Test1()
+        public void Price_of_original_dishes()
         {
 
         }
+
+        //[Fact]
+        //public void Price_of_original_dishes()
+        //{
+
+        //}
+
+        //[Fact]
+        //public void Price_of_original_dishes()
+        //{
+
+        //}
     }
 }

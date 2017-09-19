@@ -12,6 +12,7 @@ namespace PizzeriaUnitTests
     {
         private ApplicationDbContext _context;
 
+
         public override void InitializeDatabase()
         {
             base.InitializeDatabase();
@@ -23,17 +24,21 @@ namespace PizzeriaUnitTests
 
         private void CreateData(ApplicationDbContext context)
         {
+            var dishIngredients = new List<DishIngredient>();
+
+
             var dish = new Dish()
             {
-                DishId = 33
+                DishId = 33,
+                DishIngredients = dishIngredients
             };
             context.Dishes.Add(dish);
 
             var basketItem = new BasketItem()
             {
+                BasketItemId = 45,
                 Dish = dish,
                 Quantity = 2,
-                Price = 70
             };
             context.BasketItems.Add(basketItem);
 
@@ -52,8 +57,7 @@ namespace PizzeriaUnitTests
         public void GetCurrentBasket_returns_correct_basket()
         {
             //Arrange
-            var httpContext = new DefaultHttpContext();
-            httpContext.Session = new TestSession();
+            var httpContext = new DefaultHttpContext {Session = new TestSession()};
             httpContext.Session.SetInt32("BasketId", 3);
 
             var basketService = new BasketService(_context);
@@ -69,14 +73,28 @@ namespace PizzeriaUnitTests
         public void GetTotal_returns_correct_total()
         {
             //Arrange
-            var httpContext = new DefaultHttpContext();
-            httpContext.Session = new TestSession();
+            var httpContext = new DefaultHttpContext {Session = new TestSession()};
             httpContext.Session.SetInt32("BasketId", 3);
 
             var basketService = new BasketService(_context);
 
             //Act
             var result = basketService.GetTotal(httpContext.Session);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal(140, result);
+        }
+
+        [Fact]
+        public void GetPriceForBasketItem_returns_correct_total()
+        {
+            //Arrange
+
+            var basketService = new BasketService(_context);
+
+            //Act
+            var result = basketService.GetPriceForBasketItem(45);
 
             //Assert
             Assert.NotNull(result);

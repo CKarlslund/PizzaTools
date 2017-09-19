@@ -11,6 +11,7 @@ using Moq;
 using Pizzeria.Controllers;
 using Pizzeria.Data;
 using Pizzeria.Models;
+using Pizzeria.Services;
 using Xunit;
 
 namespace PizzeriaUnitTests
@@ -54,8 +55,11 @@ namespace PizzeriaUnitTests
         {
             //Arrange         
             var mockLogger = new Mock<ILogger<DishController>>();
+            var mockIngredientService = new Mock<IngredientService>();
+            var mockDishService = new Mock<DishService>();
 
-            var controller= new DishController(_context, mockLogger.Object);
+
+            var controller= new DishController(_context, mockLogger.Object, mockIngredientService.Object, mockDishService.Object);
 
             //Act
             var result = await controller.Index();
@@ -74,8 +78,10 @@ namespace PizzeriaUnitTests
             var dishId = 1;
 
             var mockLogger = new Mock<ILogger<DishController>>();
+            var mockIngredientService = new Mock<IngredientService>();
+            var mockDishService = new Mock<DishService>();
 
-            var controller = new DishController(_context, mockLogger.Object);
+            var controller = new DishController(_context, mockLogger.Object, mockIngredientService.Object, mockDishService.Object);
 
             // Act
             var result = await controller.Details(dishId);
