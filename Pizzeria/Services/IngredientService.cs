@@ -20,14 +20,6 @@ namespace Pizzeria.Services
 
             var ingredientsList = _context.Ingredients.OrderBy(x => x.Name).ToList();
 
-            //foreach (var ingredient in ingredientsList)
-            //{
-            //    if (dishIngredients.Exists(x => x.IngredientId == ingredient.IngredientId))
-            //    {
-            //        ingredient.Enabled = true;
-            //    }
-            //}
-
             return ingredientsList;
         }
 
