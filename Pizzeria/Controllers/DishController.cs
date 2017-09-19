@@ -62,7 +62,23 @@ namespace Pizzeria.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            return View();
+            var model = new CreateDishViewModel
+            {
+                Dish = new Dish(),
+                Ingredients = new List<CheckBox>()
+            };
+
+            foreach (var ingredient in _ingredientService.All())
+            {
+                model.Ingredients.Add(new CheckBox
+                {
+                    Id = ingredient.IngredientId,
+                    Name = ingredient.Name,
+                    Selected = false
+                });
+            }
+
+            return View(model);
         }
 
         // POST: Dishes/Create
@@ -71,34 +87,32 @@ namespace Pizzeria.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price,CategoryId,")] Dish dish, IFormCollection formCollection)
+        public async Task<IActionResult> Create(CreateDishViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var category = _context.Categories.FirstOrDefault(x => x.CategoryId == dish.CategoryId);
+                var category = _context.Categories.FirstOrDefault(x => x.CategoryId == model.Dish.CategoryId);
 
-                dish.ImageUrl = category.DefaultImage;
+                
+                _context.Dishes.Add(model.Dish);
+                _context.SaveChanges();
 
-                var ingredientKeys = formCollection.Keys.Where(x => x.Contains("ingredient-"));
+                model.Dish.ImageUrl = category.DefaultImage;
 
-                dish.DishIngredients = new List<DishIngredient>();
-
-                foreach (var ingredientKey in ingredientKeys)
+                foreach (var ingredient in model.Ingredients.Where(i => i.Selected))
                 {
-                    var splitKey = ingredientKey.Split("-");
-
-                    var ingredientId = Convert.ToInt32(splitKey[1]);
-
-                    dish.DishIngredients.Add(new DishIngredient() { IngredientId = ingredientId, Enabled = true, DishId = dish.DishId });
+                    _context.DishIngredients.Add(new DishIngredient
+                    {
+                        DishId = model.Dish.DishId,
+                        IngredientId = ingredient.Id
+                    });                    
                 }
-
-                _context.Dishes.Add(dish);
-
+                _context.Update(model.Dish);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(dish);
+            return View(model);
         }
 
         // GET: Dishes/Edit/5
@@ -111,10 +125,13 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            EditDishViewModel model = new EditDishViewModel();
-            model.Dish = dish;
-            model.Ingredients = new List<CheckBox>();
-                foreach (var ingredient in _ingredientService.All())
+            var model = new EditDishViewModel
+            {
+                Dish = dish,
+                Ingredients = new List<CheckBox>()
+            };
+
+            foreach (var ingredient in _ingredientService.All())
                 {
                     model.Ingredients.Add(new CheckBox
                     {
@@ -144,7 +161,10 @@ namespace Pizzeria.Controllers
             {
                 try
                 {
-                    await _context.DishIngredients.ForEachAsync(di => _context.Remove(di));
+                    await _context.DishIngredients
+                        .Where(i => i.DishId == model.Dish.DishId)
+                        .ForEachAsync(di => _context.Remove(di));
+
                     await _context.SaveChangesAsync();
 
                     foreach (var ingredient in model.Ingredients.Where(i => i.Selected))

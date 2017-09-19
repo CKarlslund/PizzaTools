@@ -1,5 +1,5 @@
 ﻿@using Pizzeria.Services
-@model Pizzeria.Models.Dish
+@model Pizzeria.Models.CreateDishViewModel
 @inject Pizzeria.Services.CategoryService CategoryService
 @inject Pizzeria.Services.IngredientService IngredientService
 
@@ -18,36 +18,33 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="@Model.Dish.Name" class="control-label"></label>
+                <input asp-for="@Model.Dish.Name" class="form-control" />
+                <span asp-validation-for="@Model.Dish.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <label asp-for="@Model.Dish.Price" class="control-label"></label>
+                <input asp-for="@Model.Dish.Price" class="form-control" />
+                <span asp-validation-for="@Model.Dish.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
+                <label asp-for="@Model.Dish.Category" class="control-label"></label>
                 @{
-                    <select asp-for="CategoryId" asp-items="@selectList"></select>
+                    <select asp-for="@Model.Dish.CategoryId" asp-items="@selectList"></select>
                 }
-                <span asp-validation-for="Category" class="text-danger"></span>
+                <span asp-validation-for="@Model.Dish.Category" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DishIngredients" class="control-label"></label>
                 @{
-                    for (var i = 0; i < ingredients.Count; i++)
+                    for (var i = 0; i < Model.Ingredients.Count(); i++)
                     {
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" asp-for="@Model.DishIngredients[i].Enabled"
-                                       name="ingredient-@ingredients[i].IngredientId" /> @ingredients[i].Name
-                                </label>
-                            </div>
+                        <input type="checkbox" asp-for="@Model.Ingredients[i].Selected"/>
+                        <label asp-for="@Model.Ingredients[i].Selected"> @Model.Ingredients[i].Name</label>
+                        <input type="hidden" asp-for="@Model.Ingredients[i].Id"/>
+                        <input type="hidden" asp-for="@Model.Ingredients[i].Name"/>
+                        <br/>
                     }
                 }
-                <span asp-validation-for="DishIngredients" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
