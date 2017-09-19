@@ -79,6 +79,7 @@ namespace PizzeriaUnitTests
             var result = basketService.GetTotal(httpContext.Session);
 
             //Assert
+            Assert.NotNull(result);
             Assert.Equal(140, result);
         }
     }

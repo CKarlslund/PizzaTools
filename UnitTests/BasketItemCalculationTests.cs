@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace PizzeriaUnitTests
+namespace UnitTests
 {
     public class UnitTest1
     {
