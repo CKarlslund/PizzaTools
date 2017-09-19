@@ -1,5 +1,5 @@
-﻿@model Pizzeria.Models.EditDishViewModel
-@inject Pizzeria.Services.IngredientService IngredientService
+﻿@using Pizzeria.Models.DishViewModels
+@model Pizzeria.Models.DishViewModels.EditDishViewModel
 @inject Pizzeria.Services.CategoryService CategoryService
 
 @{
@@ -9,8 +9,6 @@
 <h2>Edit dish</h2>
 
 @{
-    var ingredients = IngredientService.All();
-    var dishIngredients = IngredientService.AllForDish(Model.Dish.DishId);
     var selectList = CategoryService.GetSelectList(Model.Dish.DishId);
 }
 <hr />

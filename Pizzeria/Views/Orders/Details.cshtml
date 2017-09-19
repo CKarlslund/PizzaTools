@@ -53,10 +53,17 @@
     @{
         foreach (var basketItem in @Model.Basket.Items)
         {
-                
-            <div><h4>@basketItem.Name</h4></div>
-                foreach (var basketItemIngredient in basketItem.BasketItemIngredients)
-                 {
+
+            if (basketItem.Name != null)
+            {
+                <div><h4>@basketItem.Name</h4></div>
+            }
+            else
+            {
+                <div><h4>@basketItem.Dish.Name</h4></div>
+            }
+            foreach (var basketItemIngredient in basketItem.BasketItemIngredients)
+            {
                      <div>@basketItemIngredient.Ingredient.Name</div>
                  }
              
