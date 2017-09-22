@@ -6,10 +6,10 @@
     
 @foreach (var dish in Model)
     {
-        <div class="col-md-3">
-            <div class ="well" id="pizzaBox">
+        <div class=".item">
+            <div class ="well">
                 @{
-                    <img src="@dish.ImageUrl"/>
+                    <img src="@dish.ImageUrl" style="max-width: 150px"/>
                 }
 
                 <div>
@@ -17,16 +17,16 @@
                         <strong>@dish.Name</strong>
                     </h3>
                 </div>
-                <div class="label label-default">
+                <div class="label" style="color: black">
                     @dish.Price.ToString("c")
                 </div>
                 <div>
-                    <p>
-                        <a class="btn btn-default" asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Details</a>
-                        <button class="btn btn-default add" type="submit" name="Add-@dish.DishId" style="float:left">
+
+                        <button class="btn dishBtn"asp-controller="Dish" asp-action="Details" asp-route-id="@dish.DishId">Info</button>
+                        <button class="btn dishBtn" type="submit" name="Add-@dish.DishId">
                             <span class="glyphicon glyphicon-shopping-cart" style="float:left"></span>
                         </button>
-                    </p>
+
                 </div>
             </div>
         </div>

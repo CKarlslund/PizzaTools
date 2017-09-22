@@ -15,15 +15,51 @@ div {
     padding: 5px;
 }
 
-/*input {
-    width: 100%;
-    padding: 6px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-}*/
-
 h2 {
     font-family: 'Indie Flower', cursive, bold;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.item {
+    flex-grow: 1;
+}
+
+.checkbox {
+    /*padding: 0;*/
+    margin: 0;
+}
+
+.dishBtn {
+    background: #ffe600;
+    background-image: -webkit-linear-gradient(top, #ffe600, #ffc400);
+    background-image: -moz-linear-gradient(top, #ffe600, #ffc400);
+    background-image: -ms-linear-gradient(top, #ffe600, #ffc400);
+    background-image: -o-linear-gradient(top, #ffe600, #ffc400);
+    background-image: linear-gradient(to bottom, #ffe600, #ffc400);
+    -webkit-border-radius: 3;
+    -moz-border-radius: 3;
+    border-radius: 3px;
+    font-family: Arial;
+    color: #343a45;
+    font-size: 17px;
+    /*padding: 10px 20px 10px 20px;*/
+    text-decoration: none;
+    height: 40px;
+}
+
+.dishBtn:hover {
+    background: #ffb300;
+    background-image: -webkit-linear-gradient(top, #ffb300, #ff9100);
+    background-image: -moz-linear-gradient(top, #ffb300, #ff9100);
+    background-image: -ms-linear-gradient(top, #ffb300, #ff9100);
+    background-image: -o-linear-gradient(top, #ffb300, #ff9100);
+    background-image: linear-gradient(to bottom, #ffb300, #ff9100);
+    text-decoration: none;
 }
 
 .sidebar-brand {
